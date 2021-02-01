@@ -1,0 +1,221 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[english]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+%\usepackage[french]{varioref} %voir x p y
+
+\usepackage{fancyhdr}% en têtes
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry}
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+\usepackage{multirow}
+
+\usepackage{aeguill} %guillemets
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% READ THIS BEFORE CHANGING ANYTHING
+%
+%
+% - TP number: can be changed using the command
+%		\def \tpnumber {TP 1 }
+%
+% - Version: controlled by a new command:
+%		\newcommand{\version}{v1.0.0}
+%
+% - Booleans: there are three booleans used in this document:
+%	- 'corrige', controlled by defining the variable 'corrige'
+% You can define those variables in a makefile using such a command:
+% pdflatex -shell-escape -jobname="infoh410_tp1" "\def\corrige{} \input{infoh410_tp1.tex}"
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Numero du TP :
+\def \tpnumber {TP 3 }
+
+\newcommand{\version}{v1.0.0}
+
+
+% ########     #####      #####    ##         #########     ###     ##      ##  
+% ##     ##  ##     ##  ##     ##  ##         ##           ## ##    ###     ##  
+% ##     ##  ##     ##  ##     ##  ##         ##          ##   ##   ## ##   ##  
+% ########   ##     ##  ##     ##  ##         ######     ##     ##  ##  ##  ##  
+% ##     ##  ##     ##  ##     ##  ##         ##         #########  ##   ## ##  
+% ##     ##  ##     ##  ##     ##  ##         ##         ##     ##  ##     ###  
+% ########     #####      #####    #########  #########  ##     ##  ##      ##  
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+\setboolean{corrige}{false}% pas de corrigé
+
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\pdfinfo{
+/Author (ULB -- CoDe/IRIDIA)
+/Title (\tpnumber, INFO-H-410)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [INFO-H-410] Techniques of AI},
+pdfauthor={ULB -- CoDe/IRIDIA},
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+
+%  ######     #####    ##       ##  ##       ##     ###     ##      ##  ######      #######   
+% ##     ##  ##     ##  ###     ###  ###     ###    ## ##    ###     ##  ##    ##   ##     ##  
+% ##         ##     ##  ## ## ## ##  ## ## ## ##   ##   ##   ## ##   ##  ##     ##  ##         
+% ##         ##     ##  ##  ###  ##  ##  ###  ##  ##     ##  ##  ##  ##  ##     ##   #######   
+% ##         ##     ##  ##       ##  ##       ##  #########  ##   ## ##  ##     ##         ##  
+% ##     ##  ##     ##  ##       ##  ##       ##  ##     ##  ##     ###  ##    ##   ##     ##  
+%  #######     #####    ##       ##  ##       ##  ##     ##  ##      ##  ######      #######   
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+\ifthenelse {\boolean{corrige}} {\fr{\paragraph{Réponse :}}\en{\paragraph{Answer:}} \color{darkblue}   #1\color{black}} {}
+}
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+
+%  #######   ##########  ##    ##   ##         #########  
+% ##     ##      ##       ##  ##    ##         ##         
+% ##             ##        ####     ##         ##         
+%  #######       ##         ##      ##         ######     
+%        ##      ##         ##      ##         ##         
+% ##     ##      ##         ##      ##         ##         
+%  #######       ##         ##      #########  #########  
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[INFO-H-410] Techniques of AI\\ \tpnumber}
+\rhead{\version\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Correction}{}}
+\cfoot{}
+%%
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+% ##########  ########   ##########  ##         #########  
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ######     
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ##         
+%     ##      ########       ##      #########  ######### 
+\date{\vspace{-1.7cm}\version}
+\title{\vspace{-2cm} \tpnumber \\ Techniques of AI [INFO-H-410] \ifthenelse{\boolean{corrige}}{Correction}{}}
+
+
+\begin{document}
+\selectlanguage{english}
+
+\maketitle
+
+\paragraph{Calculating the size of the hypothesis space}
+\begin{Q}
+    Suppose there are m attributes in a learning task and that every attribute $i$ can take $k_i$
+possible values. What will be the size of the hypothesis space?
+\reponse{
+}
+\end{Q}
+
+\paragraph{Order of training instances}
+\begin{Q}
+    In candidate elimination, suppose you have $n$ training instances $T_1...T_n$. After the $n_{th}$
+training instance, candidate elimination learned the boundaries $S$ and $G$. Will $S$ and $G$
+differ or not when providing the training instances in reverse order: $T_n...T_1$? Explain why
+(not).
+\reponse{
+}
+\end{Q}
+
+
+\begin{Q}
+What is the version space while tracing the candidate elimination algorithm with the
+following examples?
+
+$Architecture \in \{Gothic, Romanesque\}$ \\
+$Size \in \{Small, Large\}$ \\
+$Steeples \in \{Zero, One, Two\}$ \\
+\begin{itemize}
+    \item Ex. 1: Arch = G, Sz = S, St = 2 → classified building
+    \item Ex. 2: Arch = R, Sz = S, St = 2 → non-classified building
+    \item Ex. 3: Arch = G, Sz = L, St = 2 → classified building
+    \item Ex. 4: Arch = G, Sz = S, St = 0 → non-classified building
+    \item Ex. 5: Arch = R, Sz = L, St = 2 → classified building
+\end{itemize}
+
+\reponse{
+}
+\end{Q}
+
+\paragraph{Rectangular version spaces and candidate elimination}
+\begin{Q}
+    Consider the instance space consisting of integer points in the $x, y$ plane and the set of
+hypotheses H consisting of rectangles. More precisely, hypotheses are of the form $a \leq x \leq b$,
+$c \leq y \leq d$, where $a$, $b$, $c$ and $d$ can be any integers. Consider the version space with 
+respect to the set of positive (+) and negative (-) training examples:
+
+\begin{tabular}{ll}
+$-(1,3)$ & $-(2,6)$ \\
+$+(6,5)$ & $+(5,3)$ \\
+$-(9,4)$ & $-(5,1)$ \\
+$+(4,4)$ & $-(5,8)$
+\end{tabular}
+
+\begin{enumerate}
+    \item What is the S boundary of the version space in this case? Write a diagram with the
+training data and the S boundary.
+    \item What is the G boundary of this version space? Draw that in the diagram as well.
+    \item Suppose the learner may suggest a new $x, y$ instance and ask the trainer for its 
+        classification. Suggest a query guaranteed to reduce the size of the version space, 
+        regardless how the trainer classifies it. Suggest one that will not.
+    \item Now assume you are the teacher, attempting to reach a particular target concept,
+$3 \leq x \leq 5, 2 \leq y \leq 9$. What is the smallest number of training examples you can
+provide so that the Candidate- Elimination algorithm will perfectly learn the concept?
+
+\end{enumerate}
+\end{Q}
+
+\paragraph{Finding a maximally specific consistent hypothesis}
+\begin{Q}
+Consider a concept learning problem in which each instance is a real number and in which
+each hypothesis is an interval over the reals. More precisely, each hypothesis in H is of the
+form: $a < x < b$ as in $4.5 < x < 6.1$, meaning that all real numbers between 4.5 and 6.1 are
+classified as positive examples and all others are classified as negative examples.
+\begin{enumerate}
+    \item Explain informally why there cannot be a maximally specific consistent hypothesis for
+any set of positive training examples.
+    \item Suggest a modification to the hypothesis representation so this will not happen.
+\end{enumerate}
+\end{Q}
+
+
+\end{document} 

@@ -1,0 +1,333 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[english]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+%\usepackage[french]{varioref} %voir x p y
+
+\usepackage{subcaption}
+\usepackage{fancyhdr}% en têtes
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+\usepackage[]{algorithm2e}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry}
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+\usepackage{multirow}
+
+\usepackage{aeguill} %guillemets
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% READ THIS BEFORE CHANGING ANYTHING
+%
+%
+% - TP number: can be changed using the command
+%		\def \tpnumber {TP 1 }
+%
+% - Version: controlled by a new command:
+%		\newcommand{\version}{v1.0.0}
+%
+% - Booleans: there are three booleans used in this document:
+%	- 'corrige', controlled by defining the variable 'corrige'
+% You can define those variables in a makefile using such a command:
+% pdflatex -shell-escape -jobname="infoh410_tp1" "\def\corrige{} \input{infoh410_tp1.tex}"
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Numero du TP :
+\def \tpnumber {TP 7 }
+
+\newcommand{\version}{v1.0.0}
+
+
+% ########     #####      #####    ##         #########     ###     ##      ##  
+% ##     ##  ##     ##  ##     ##  ##         ##           ## ##    ###     ##  
+% ##     ##  ##     ##  ##     ##  ##         ##          ##   ##   ## ##   ##  
+% ########   ##     ##  ##     ##  ##         ######     ##     ##  ##  ##  ##  
+% ##     ##  ##     ##  ##     ##  ##         ##         #########  ##   ## ##  
+% ##     ##  ##     ##  ##     ##  ##         ##         ##     ##  ##     ###  
+% ########     #####      #####    #########  #########  ##     ##  ##      ##  
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+\setboolean{corrige}{false}% pas de corrigé
+
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\pdfinfo{
+/Author (ULB -- CoDe/IRIDIA)
+/Title (\tpnumber, INFO-H-410)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [INFO-H-410] Techniques of AI},
+pdfauthor={ULB -- CoDe/IRIDIA},
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+
+%  ######     #####    ##       ##  ##       ##     ###     ##      ##  ######      #######   
+% ##     ##  ##     ##  ###     ###  ###     ###    ## ##    ###     ##  ##    ##   ##     ##  
+% ##         ##     ##  ## ## ## ##  ## ## ## ##   ##   ##   ## ##   ##  ##     ##  ##         
+% ##         ##     ##  ##  ###  ##  ##  ###  ##  ##     ##  ##  ##  ##  ##     ##   #######   
+% ##         ##     ##  ##       ##  ##       ##  #########  ##   ## ##  ##     ##         ##  
+% ##     ##  ##     ##  ##       ##  ##       ##  ##     ##  ##     ###  ##    ##   ##     ##  
+%  #######     #####    ##       ##  ##       ##  ##     ##  ##      ##  ######      #######   
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+\ifthenelse {\boolean{corrige}} {\fr{\paragraph{Réponse :}}\en{\paragraph{Answer:}} \color{darkblue}   #1\color{black}} {}
+}
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+
+%  #######   ##########  ##    ##   ##         #########  
+% ##     ##      ##       ##  ##    ##         ##         
+% ##             ##        ####     ##         ##         
+%  #######       ##         ##      ##         ######     
+%        ##      ##         ##      ##         ##         
+% ##     ##      ##         ##      ##         ##         
+%  #######       ##         ##      #########  #########  
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[INFO-H-410] Techniques of AI\\ \tpnumber}
+\rhead{\version\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Correction}{}}
+\cfoot{}
+%%
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+% ##########  ########   ##########  ##         #########  
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ######     
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ##         
+%     ##      ########       ##      #########  ######### 
+\date{\vspace{-1.7cm}\version}
+\title{\vspace{-2cm} \tpnumber \\ Techniques of AI [INFO-H-410] \ifthenelse{\boolean{corrige}}{Correction}{}}
+
+
+\begin{document}
+\selectlanguage{english}
+
+\maketitle
+
+\paragraph{Genetic Algorithms}
+\begin{Q}
+
+\begin{enumerate}
+\item Based on the two candidate solutions 11101001000 and 
+00001010101, apply the following crossover procedures:
+\begin{enumerate}
+	\item Single-point crossover: 11111000000
+	\item Two-point crossover: 	  00111110000
+	\item Uniform crossover: 	  10011010011
+\end{enumerate}
+\item Implement a genetic algorithm that starts with an initial
+population of randomly generated strings, and that returns a string 
+as close as possible to the target string ``Hello, World". A Python 
+skeleton is available at  \url{https://bit.ly/2HUSBkn}. The 
+\texttt{fitness}, \texttt{mutate}, 
+and \texttt{crossover} functions are missing. Your goal is to 
+implement these functions, together with the core logic of the 
+algorithm.  
+\end{enumerate}
+
+\end{Q}
+
+\paragraph{Ant system}
+
+\begin{enumerate}
+% \item What kind of algorithm is Ant system (AS)? Does AS guarantees 
+%to eventually find the optimal solution or to determine that no 
+%solution exists?
+ \item Is it possible to use AS with $\{\alpha=0, \beta=1\}$ or  $\{\alpha=1, \beta=0\}$? What is the effect in both cases?
+ \item How $\rho$ relates with the exploration and exploitation performed by AS?
+% \item In class we used a minimization problem (TSP) as example, 
+%what modifications are needed to solve a maximization problem with 
+%AS?
+ \item Assume the following symmetric Traveling Salesman Problem (TSP)
+ instance:\\
+   \begin{figure}[ht]
+   \begin{subfigure}{0.31\textwidth}
+   \begin{tabular} {| l | c |c | c | c | c |}
+   \hline
+        &  A  &  B  &  C  &  D  & E   \\
+    \hline
+      A & $-$ &  1  &  2  &  2  & 6   \\
+      B &  1  & $-$ &  6  &  8  & 10  \\  
+      C &  2  &  6  & $-$ &  12 & 4   \\
+      D &  2  &  8  & 12  & $-$ & 1   \\
+      E &  6  & 10  &  4  &   1 & $-$  \\
+    \hline
+   \end{tabular}
+   \caption{TSP instance (tsp)}
+   \end{subfigure}
+   ~~~~~~~~
+   \begin{subfigure}{0.45\textwidth}
+   \centering
+   \begin{tabular} {| l | c |c | c | c | c |}
+   \hline
+        &  A  &  B  &  C  &  D  & E   \\
+    \hline
+      A & $-$    &  0.56  &  0.66  &  0.60  & 0.50   \\
+      B &  0.56  & $-$    &  0.60  &  0.56  & 0.60  \\  
+      C &  0.66  &  0.60  & $-$    &  0.50  & 0.56   \\
+      D &  0.60  &  0.56  &  0.50  & $-$    & 0.66   \\
+      E &  0.50  &  0.60  &  0.56  &  0.66  & $-$  \\
+    \hline
+   \end{tabular}
+   \caption{Pheromone matrix ($\tau$) (iteration 1) }
+   \end{subfigure}
+   \end{figure}
+   
+   An Ant System algorithm is applied to this instance using $\alpha=2$, $\beta=1$, $\rho=0.5$, $\#ants=3$, $\eta_{ij}=1/tsp_{ij}$ and $\tau_0=1$, after the first iteration the pheromone matrix ($\tau$) is the one given in the figure above. 
+   \begin{enumerate}
+     \item What is the meaning of the values in $\tau$? Why $\tau_{C,D}=0.5$?
+     \item Use this information to generate the first solution of 
+     iteration 2 starting from city D. Use random numbers: $\{0.80, 
+     0.27, 0.88, 0.47, 0.05, \\0.98, 0.23, 0.06 \}$
+     \item The following solutions generated by the algoritm  are $AEDCBA$ with $cost=26$ and $DECBAD$ with $cost=14$. Update the pheromone using this information.
+     \item After 12 iterations the pheromone matrix is the following:
+        \begin{figure}[ht]
+           \centering
+           \begin{tabular} {| l | c |c | c | c | c |}
+            \hline
+                &  A  &  B  &  C  &  D  & E   \\
+            \hline
+              A & $-$     &  0.4285  &  0.0004  &  0.4285  & 0.0003   \\
+              B &  0.4285 & $-$      &  0.4286  &  0.0003  & 0.0003  \\  
+              C &  0.0004 &  0.4286  & $-$      &  0.0003  & 0.4285   \\
+              D &  0.4285 &  0.0003  &  0.0003  & $-$      & 0.4286   \\
+              E &  0.0003 &  0.0003  &  0.4285  &  0.4286  & $-$  \\
+            \hline
+            \end{tabular}
+            \caption{Pheromone matrix ($\tau$) (iteration 12)}
+        \end{figure}
+         
+         Would you advice to continue executing more iterations? Why?
+   \end{enumerate}
+ \textit{Remember: the tour length is computed starting and ending in the same city.}
+ %\item How would you apply AS to the Graph Coloring Problem(GCP)? What would be the decision variables? How to define the pheromone? Is it possible to define heuristic information?\\
+  
+  %\textit{Note: The objective of the GCP is to find the minimum number of different colors with which is possible to assign a color to each node of a given graph without having adjacent nodes with the same color.} 
+ \end{enumerate}
+
+\clearpage
+\paragraph{Reminder}
+
+\begin{algorithm}[h!]
+	\KwData{$Pop_{size}$, $Num_{gen}$, 
+		$Crossover_{proc}$, $Mutation_{proc}$}
+		~\\
+		\For{i $\in$ ${1, .., Pop_{size}}$ }{
+			Population$\left[i\right]$ $\leftarrow$ RandomSolution()}
+			Evaluate(Population)\\
+			$S_{best}$ $\leftarrow$ GetBestSolution(Population)\\
+			\For{gen $\in$ ${1, .., Num_{gen}}$ }{
+				Parents $\leftarrow$ Selection(Population)\\
+				Children $\leftarrow$ $\phi$ \\
+				\For{$Parent_1$, $Parent_2$ $\in$ Parents}{
+					$Children_1$, $Children_2$ $\leftarrow$ 
+					Crossover($Parent_1$, $Parent_2$, 
+					$Crossover_{proc}$)\\
+					$Children_1$ $\leftarrow$ Mutate($Children_1$, 
+					$Mutation_{proc}$) \\
+					$Children_2$ $\leftarrow$ Mutate($Children_2$, 
+					$Mutation_{proc}$)
+					}
+			Evaluate(Children)\\
+			$P_{best}$ $\leftarrow$ 
+			GetBestSolution(Children)\\
+			\If{$P_{best}$ $>$ $S_{best}$}{$S_{best}$ 
+				$\leftarrow$ $P_{best}$}
+			Population $\leftarrow$ Children\\
+			}
+	\caption{Pseudocode for a simple \textbf{\large{genetic 
+	algorithm}}. 
+	$Pop_{size}$ 
+	is the number of individuals in the population, 
+	$Num_{gen}$ is the number of generations, 
+		$Crossover_{proc}$ is a crossover procedure, and 
+		$Mutation_{proc}$ is a mutation procedure.}
+	\label{alg:ga}
+\end{algorithm}
+						
+						
+						
+\begin{algorithm}[h!]
+	\KwData{$n$, $m$, $\alpha$, $\beta$, $\rho$, $\tau_0$}
+	~\\
+	\While{!termination()}{
+		\For{k $\in$ ${1, .., m}$}{
+			ants$\left[k\right]\left[1\right]$ $\leftarrow$ 
+			SelectRandomCity$()$\\
+			\For{i $\in$ ${2, n}$}{
+				ants$\left[k\right]\left[i\right]$ $\leftarrow$ 
+				ASDecisionRule$($ants, i$)$	
+			}
+			ants$\left[k\right]\left[n+1\right]$ $\leftarrow$ 
+			ants$\left[k\right]\left[1\right]$
+		}
+		UpdatePheromones$($ants$)$
+	}
+	\caption{Pseudocode for the \textbf{\large{Ant System 
+	algorithm}}. $n$ is 
+	the size 
+	of the problem, $m$ the number of ants, $\alpha$ and $\beta$ are 
+	parameters of the solution construction procedure ASDecisionRule 
+	(see Eq.~\ref{eq:deci}), 
+	$\rho$ is the parameter of the pheromone update procedure 
+	UpdatePheromones (see Eq.~\ref{eq:phero}), and $\tau_0$ is the 
+	initial value of the 
+	pheromones}
+	\label{alg:as}
+\end{algorithm}
+
+\begin{equation}\label{eq:deci}
+	ASDecisionRule \rightarrow p_{ij}^k(t) = 
+	\frac{\left[\tau_{ij}\right]^{\alpha}\cdot\left[\eta_{ij}\right]^\beta}
+	 {\sum_{l \in N_i^k} 
+	\left[\tau_{il}\right]^{\alpha}\cdot\left[\eta_{il}\right]^\beta},
+	\qquad \text{if} \quad j\in N_i^k
+\end{equation}
+
+\begin{equation}\label{eq:phero}
+\begin{aligned}
+	UpdatePheromones \rightarrow \tau_{ij}(t) = 
+	(1-\rho)\cdot\tau(t-1) + \sum_{k=1}^{m}\bigtriangleup\tau_{ij}^k 
+	\\
+	\tau_{ij}^k = \frac{1}{L_k}, \qquad \text{if $arc(i,j)$ is used 
+	by 
+	ant k on its tour}
+\end{aligned}
+\end{equation}
+\end{document} 
