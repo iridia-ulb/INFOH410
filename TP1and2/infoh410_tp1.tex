@@ -7,7 +7,6 @@
 \usepackage{xspace} % typographie IN
 \usepackage{hyperref}% hyperliens
 \usepackage[all]{hypcap} %lien pointe en haut des figures
-%\usepackage[french]{varioref} %voir x p y
 
 \usepackage{fancyhdr}% en têtes
 \usepackage{graphicx} %include pictures
@@ -118,7 +117,6 @@ pdfsubject={}
 \lhead{[INFO-H-410] Techniques of AI\\ \tpnumber}
 \rhead{\version\\ page \thepage}
 \chead{\ifthenelse{\boolean{corrige}}{Correction}{}}
-\cfoot{}
 %%
 
 \setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
@@ -139,6 +137,7 @@ pdfsubject={}
 \selectlanguage{english}
 
 \maketitle
+
 \paragraph{Fundamentals for search}
 \begin{Q}
 Suppose you have a data structure D with the push and pop operation. Suppose you have
@@ -306,40 +305,28 @@ information from it.
 \reponse{
     (a) A straightforward approach would be to represent the state by an array containing the
 following:
-•
  number of missionaries at the left
-•
  number of cannibals at the left
-•
  number of missionaries at the right
-•
  number of cannibals at the right
-•
  number of missionaries in the boat
-•
  number of cannibals in the boat
-•
  position of the boat
 (b) This representation is overcomplete: if you know how many missionaries and cannibals
 we have at the one bank and in the boat, we know how many there are at the other
 bank, as we always have 3 missionaries and 3 cannibals. So, a first improvement might
 be the following representation:
-•
  number of missionaries at the left
-•
  number of cannibals at the left
-•
  number of missionaries in the boat
-•
  number of cannibals in the boat
-•
  position of the boat
 However, as the boat can contain at most 1 missionary and 1 cannibal, the cannibals
 can never outnumber the missionaries in the boat, so it is of no use to represent the
 number of each in the boat. So, we could simply store:
-• number of missionaries at the left
-• number of cannibals at the left
-• position of the boat
+ number of missionaries at the left
+ number of cannibals at the left
+ position of the boat
 For instance < 3, 3, 1 > represent the initial state, with 3 missionaries and 3 cannibals
 at the left bank, with the boat at the left bank. The state< 3, 1, 0 > can then be
 reached from this state, by the action“transfer two cannibals to the right bank”. As a
@@ -436,10 +423,10 @@ optimal solution n* has an optimal cost f(n*) = C*.
     A heuristic is admissible if it never overestimates the cost to the goal.
 (a) Suppose A* returns a solution which is not optimal. This means that at some point a
 non optimal solution G2 must be in the agenda. If G2 is not optimal, then f (G2) >
-f (n∗) = C∗
+f (n*) = C*
 (b) If h(n) is admissible, then h does not overestimate the cost to the goal, so we can put
-f (n) < C∗
-(c) Combining a and b results in the inequality: f (n) < C∗ < f (G2). Hence, every node
+f (n) < C*
+(c) Combining a and b results in the inequality: f (n) < C* < f (G2). Hence, every node
 on the path towards the optimal solution has a cost less than the cost of the non
 optimal solution G2. Hence, G2 will never be expanded from the priority queue. So,
 G2 cannot be the solution of the A* algorithm.
@@ -464,5 +451,9 @@ G2 cannot be the solution of the A* algorithm.
 %     \item Give a sequence of states leading to the goal state.
 % \end{enumerate}
 % \end{Q}
+
+\noindent
+\rule{\textwidth}{0.4pt}
+\footnotesize{Found an error? Let us know: \url{https://github.com/iridia-ulb/INFOH410/issues}}
 
 \end{document} 

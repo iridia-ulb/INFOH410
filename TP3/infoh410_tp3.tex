@@ -69,7 +69,7 @@
 \else
 \setboolean{corrige}{true}%corrigé
 \fi
-\setboolean{corrige}{false}% pas de corrigé
+\setboolean{corrige}{true}% pas de corrigé
 
 
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -98,8 +98,9 @@ pdfsubject={}
 % ##     ##  ##     ##  ##       ##  ##       ##  ##     ##  ##     ###  ##    ##   ##     ##  
 %  #######     #####    ##       ##  ##       ##  ##     ##  ##      ##  ######      #######   
 \newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
-\ifthenelse {\boolean{corrige}} {\fr{\paragraph{Réponse :}}\en{\paragraph{Answer:}} \color{darkblue}   #1\color{black}} {}
+\ifthenelse {\boolean{corrige}} {\paragraph{Answer:} \color{darkblue}   #1\color{black}} {}
 }
+
 
 \newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
 
@@ -116,7 +117,6 @@ pdfsubject={}
 \lhead{[INFO-H-410] Techniques of AI\\ \tpnumber}
 \rhead{\version\\ page \thepage}
 \chead{\ifthenelse{\boolean{corrige}}{Correction}{}}
-\cfoot{}
 %%
 
 \setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
@@ -130,7 +130,7 @@ pdfsubject={}
 %     ##         ##          ##      ##         ##         
 %     ##      ########       ##      #########  ######### 
 \date{\vspace{-1.7cm}\version}
-\title{\vspace{-2cm} \tpnumber \\ Techniques of AI [INFO-H-410] \ifthenelse{\boolean{corrige}}{Correction}{}}
+\title{\vspace{-2cm} \tpnumber \\ Techniques of AI [INFO-H-410] \ifthenelse{\boolean{corrige}}{~\\Correction}{}}
 
 
 \begin{document}
@@ -143,6 +143,8 @@ pdfsubject={}
     Suppose there are m attributes in a learning task and that every attribute $i$ can take $k_i$
 possible values. What will be the size of the hypothesis space?
 \reponse{
+    syntactically different: $(k_i+2)^m$ (+2 accounts for empty and don't care),
+    semantically different: $1+(k_i+1)^m$ (full empty attribute + attributes with don't care)
 }
 \end{Q}
 
@@ -153,6 +155,9 @@ training instance, candidate elimination learned the boundaries $S$ and $G$. Wil
 differ or not when providing the training instances in reverse order: $T_n...T_1$? Explain why
 (not).
 \reponse{
+   The concept of version space aims at invariance to instance order, keeping not a
+single concept description but a set of possible descriptions that evolves as new instances
+are presented, so order does not matter.
 }
 \end{Q}
 
@@ -164,15 +169,27 @@ following examples?
 $Architecture \in \{Gothic, Romanesque\}$ \\
 $Size \in \{Small, Large\}$ \\
 $Steeples \in \{Zero, One, Two\}$ \\
-\begin{itemize}
-    \item Ex. 1: Arch = G, Sz = S, St = 2 → classified building
-    \item Ex. 2: Arch = R, Sz = S, St = 2 → non-classified building
-    \item Ex. 3: Arch = G, Sz = L, St = 2 → classified building
-    \item Ex. 4: Arch = G, Sz = S, St = 0 → non-classified building
-    \item Ex. 5: Arch = R, Sz = L, St = 2 → classified building
-\end{itemize}
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Architecture} & \textbf{Size} & \textbf{Steeples} & \textbf{Classified ?} \\ \hline
+G                     & S             & 2                 & True                  \\ \hline
+R                     & S             & 2                 & False                 \\ \hline
+G                     & L             & 2                 & True                  \\ \hline
+G                     & S             & 0                 & False                 \\ \hline
+R                     & L             & 2                 & True                  \\ \hline
+\end{tabular}
+\end{center}
+
 
 \reponse{
+$S_0 = \{\emptyset, \emptyset, \emptyset\}$ and $G0 = \{?, ?, ?\}$\\
+$S_1 = \{G, S, 2\}$ and $G_1 = \{?, ?, ?\}$\\
+$S_2 = \{G, S, 2\}$ and $G_2 = \{G, ?, ?\}$\\
+$S_3 = \{G, ?, 2\}$ and $G_3 = \{G, ?, ?\}$\\
+$S_4 = \{G, ?, 2\}$ and $S_4 = \{G, ?, 2\}$\\
+$S_5 = G_5 = \emptyset$\\
+
 }
 \end{Q}
 
@@ -192,8 +209,9 @@ $+(4,4)$ & $-(5,8)$
 
 \begin{enumerate}
     \item What is the S boundary of the version space in this case? Write a diagram with the
-training data and the S boundary.
+        training data and the S boundary.
     \item What is the G boundary of this version space? Draw that in the diagram as well.
+    \item Use python to find the S and the G boundary and plot them (you can use the template code).
     \item Suppose the learner may suggest a new $x, y$ instance and ask the trainer for its 
         classification. Suggest a query guaranteed to reduce the size of the version space, 
         regardless how the trainer classifies it. Suggest one that will not.
@@ -202,6 +220,14 @@ $3 \leq x \leq 5, 2 \leq y \leq 9$. What is the smallest number of training exam
 provide so that the Candidate- Elimination algorithm will perfectly learn the concept?
 
 \end{enumerate}
+
+\reponse{
+(a) $S = \{4,6,3,5\}$\\
+(b) $G = \{3,8,2,7\}$\\
+(c) To reduce the VS: $(4, 6)$ or $(7, 3)$. Instances with no impact on the VS: $(5, 4)$ or $(3, 9)$.\\
+(d) 6 points: +$(3, 9)$, +$(5, 2)$, -$(2, 5)$, -$(4, 1)$, -$(6, 5)$, -$(4, 10)$.
+}
+
 \end{Q}
 
 \paragraph{Finding a maximally specific consistent hypothesis}
@@ -215,7 +241,16 @@ classified as positive examples and all others are classified as negative exampl
 any set of positive training examples.
     \item Suggest a modification to the hypothesis representation so this will not happen.
 \end{enumerate}
+
+\reponse{
+    (a) $a < x < b$ is not a well defined hypothesis representation,
+    (b) $a \leq x \leq b$
+}
 \end{Q}
 
+
+\noindent
+\rule{\textwidth}{0.4pt}
+\footnotesize{Found an error? Let us know: \url{https://github.com/iridia-ulb/INFOH410/issues}}
 
 \end{document} 
