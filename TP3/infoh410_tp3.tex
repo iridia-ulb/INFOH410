@@ -101,7 +101,6 @@ pdfsubject={}
 \ifthenelse {\boolean{corrige}} {\paragraph{Answer:} \color{darkblue}   #1\color{black}} {}
 }
 
-
 \newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
 
 
@@ -137,6 +136,14 @@ pdfsubject={}
 \selectlanguage{english}
 
 \maketitle
+
+\fbox{
+    \parbox{\textwidth}{
+    \label{source}
+\footnotesize{
+Source files, code templates and corrections related to practical sessions can be found on the UV 
+(\url{https://uv.ulb.ac.be/course/view.php?id=92215}) or on github (\url{https://github.com/iridia-ulb/INFOH410}).
+}}}
 
 \paragraph{Calculating the size of the hypothesis space}
 \begin{Q}
@@ -211,7 +218,8 @@ $+(4,4)$ & $-(5,8)$
     \item What is the S boundary of the version space in this case? Write a diagram with the
         training data and the S boundary.
     \item What is the G boundary of this version space? Draw that in the diagram as well.
-    \item Use python to find the S and the G boundary and plot them (you can use the template code).
+    \item Use python to find the S and the G boundary and plot them 
+        (you can use the code template (see page~\pageref{source})).
     \item Suppose the learner may suggest a new $x, y$ instance and ask the trainer for its 
         classification. Suggest a query guaranteed to reduce the size of the version space, 
         regardless how the trainer classifies it. Suggest one that will not.
@@ -224,8 +232,9 @@ provide so that the Candidate- Elimination algorithm will perfectly learn the co
 \reponse{
 (a) $S = \{4,6,3,5\}$\\
 (b) $G = \{3,8,2,7\}$\\
-(c) To reduce the VS: $(4, 6)$ or $(7, 3)$. Instances with no impact on the VS: $(5, 4)$ or $(3, 9)$.\\
-(d) 6 points: +$(3, 9)$, +$(5, 2)$, -$(2, 5)$, -$(4, 1)$, -$(6, 5)$, -$(4, 10)$.
+(c) see github for implementation.\\
+(d) To reduce the VS: $(4, 6)$ or $(7, 3)$, instances with no impact on the VS: $(5, 4)$ or $(3, 9)$.\\
+(e) 6 points: +$(3, 9)$, +$(5, 2)$, -$(2, 5)$, -$(4, 1)$, -$(6, 5)$, -$(4, 10)$.
 }
 
 \end{Q}
@@ -243,7 +252,7 @@ any set of positive training examples.
 \end{enumerate}
 
 \reponse{
-    (a) $a < x < b$ is not a well defined hypothesis representation,
+    (a) $a < x < b$ is not a well defined hypothesis representation,\\
     (b) $a \leq x \leq b$
 }
 \end{Q}

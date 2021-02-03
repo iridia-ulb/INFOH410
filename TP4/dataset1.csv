@@ -1,0 +1,9 @@
+hair,height,weight,lotion,sunburn
+blonde,avg,light,False,True
+blonde,tall,avg,True,False
+brown,short,avg,True,False
+blonde,short,avg,False,True
+red,avg,heavy,False,True
+brown,tall,heavy,False,False
+brown,avg,heavy,False,False
+blonde,short,light,True,False
