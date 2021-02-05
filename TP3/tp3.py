@@ -4,7 +4,14 @@ import matplotlib.patches as patches
 import math
 
 
-def main():
+def q4():
+    """
+    Q4 (c)
+    In this function, we initialize the positive and negative values,
+    and create the basis for plotting the figures.
+    Fore info about the plots visit:
+    https://matplotlib.org/index.html
+    """
     examples_p = [(6, 5), (5, 3), (4, 4)]
     examples_n = [(1, 3), (2, 6), (9, 4), (5, 1), (5, 8)]
     ax = plt.gca()
@@ -78,4 +85,4 @@ def compatible(h, S):
 
 
 if __name__ == "__main__":
-    main()
+    q4()

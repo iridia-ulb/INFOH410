@@ -8,8 +8,9 @@ import math
 # or https://matplotlib.org/users/installing.html
 
 
-def main():
+def q4():
     """
+    Q4 (c)
     In this function, we initialize the positive and negative values,
     and create the basis for plotting the figures.
     Fore info about the plots visit:
@@ -53,4 +54,4 @@ def find_G(S, n):
 
 
 if __name__ == "__main__":
-    main()
+    q4()
