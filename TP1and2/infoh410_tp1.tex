@@ -70,7 +70,7 @@
 \setboolean{corrige}{true}%corrigé
 \fi
 
-\setboolean{corrige}{true}% pas de corrigé
+% \setboolean{corrige}{true}% pas de corrigé
 
 
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -292,48 +292,55 @@ information from it.
 \reponse{
     (a) A straightforward approach would be to represent the state by an array containing the
 following:
- number of missionaries at the left,
- number of cannibals at the left,
- number of missionaries at the right,
- number of cannibals at the right,
- number of missionaries in the boat,
- number of cannibals in the boat,
- position of the boat,\\
+\begin{itemize}
+    \item number of missionaries at the left,
+    \item number of cannibals at the left,
+    \item number of missionaries at the right,
+    \item number of cannibals at the right,
+    \item number of missionaries in the boat,
+    \item number of cannibals in the boat,
+    \item position of the boat,
+\end{itemize}
 (b) This representation is overcomplete: if you know how many missionaries and cannibals
 we have at the one bank and in the boat, we know how many there are at the other
 bank, as we always have 3 missionaries and 3 cannibals. So, a first improvement might
 be the following representation:
- number of missionaries at the left,
- number of cannibals at the left,
- number of missionaries in the boat,
- number of cannibals in the boat,
- position of the boat.
+\begin{itemize}
+    \item  number of missionaries at the left,
+    \item  number of cannibals at the left,
+    \item  number of missionaries in the boat,
+    \item  number of cannibals in the boat,
+    \item  position of the boat.
+\end{itemize}
 However, as the boat can contain at most 1 missionary and 1 cannibal, the cannibals
 can never outnumber the missionaries in the boat, so it is of no use to represent the
 number of each in the boat. So, we could simply store:
- number of missionaries at the left,
- number of cannibals at the left,
- position of the boat. \\
-For instance < 3, 3, 1 > represent the initial state, with 3 missionaries and 3 cannibals
-at the left bank, with the boat at the left bank. The state< 3, 1, 0 > can then be
+\begin{itemize}
+    \item number of missionaries at the left,
+    \item number of cannibals at the left,
+    \item position of the boat. 
+\end{itemize}
+For instance <3,3,1> represent the initial state, with 3 missionaries and 3 cannibals
+at the left bank, with the boat at the left bank. The state <3,1,0> can then be
 reached from this state, by the action "transfer two cannibals to the right bank". As a
 result, we have 3 missionaries at the left bank, one cannibal at the left bank and the
 boat at the right bank.\\
-(c) A state is represented by < x, y, z >, with x varying between 0 and 3, y varying between
+(c) A state is represented by <x,y,z>, with x varying between 0 and 3, y varying between
 0 and 3 and z being either 0 or 1. So, we have 4 × 4 × 2 = 32 states at most.
-For the boat being at left, we can for instance list all 16 possible states: 331/321
-/311/301/231/221/211/201/131/121/111/101/031/021/011/001.
+For the boat being at left, we can for instance list all 16 possible states: 331/321/
+311/301/231/221/211/201/131/121/111/101/031/021/011/001.
 From this list, we can eliminate the states 231/211/201/131/121/101 
 because we have more cannibals than missionaries at one bank. The same holds of
 course for the boat being at the other side. So we have 3266 = 20 states.
-The states < 0, 0, 1 > and < 3, 3, 0 > are not valid (because it implies that you move
-an empty boat), the states < 3, 0, 1 > and < 0, 3, 0 > are not reachable, because
-all preceding states are invalid: < 3, 0, 1 > can only be reached from < 2, 0, 0 > or
-< 1, 0, 0 >. However, in both states the cannibals do outnumber the missionaries. In
+The states <0,0,1> and <3,3,0> are not valid (because it implies that you move
+an empty boat), the states <3,0,1> and <0,3,0> are not reachable, because
+all preceding states are invalid: <3,0,1> can only be reached from <2,0,0> or
+<1,0,0>. However, in both states the cannibals do outnumber the missionaries. In
 total we have hence 16 states.\\
 (d) One solution is the following:
-< 3, 3, 1 >, < 3, 1, 0 >, < 3, 2, 1 >, < 3, 0, 0 >, < 3, 1, 1 >, < 1, 1, 0 >, < 2, 2, 1 >,
-< 0, 2, 0 >, < 0, 3, 1 >, < 0, 1, 0 >, < 0, 2, 1 >, < 0, 0, 0 >,
+<3,3,1>, <3,1,0>, <3,2,1>, <3,0,0>, <3,1,1>, <1,1,0>, <2,2,1>,
+<0,2,0>, <0,3,1>, <0,1,0>, <0,2,1>, <0,0,0>,
+
 see github for implementation.
 
 }
