@@ -348,9 +348,20 @@ see github for implementation.
 
 \paragraph{Path planning}
 \begin{Q}
-% TODO: add figure
     Imagine a maze with some obstacles, you can only move 1 cell at a time in any of 
     the four directions (no diagonals). We have to find the shortest path from A to B.
+
+    \begin{center}
+    \begin{tikzpicture}
+        \fill[black!50!white] (1.5,0.5) rectangle (2,2.5);
+        \fill[black!50!white] (1,0.5) rectangle (1.5,1);
+        \draw[step=5mm,black,very thin] (0,0) grid (3,3);
+        \node[] at (0.25,2.75) {C};
+        \node[] at (0.75,1.25) {A};
+        \node[] at (2.25,1.25) {B};
+    \end{tikzpicture}
+\end{center}
+
 \begin{enumerate}
     \item Discuss whether depth first search and breadth first search will always find a path from
     A to B. Will they find the shortest path?
@@ -362,39 +373,21 @@ see github for implementation.
     \item Implement the A* algorithm for this maze using python (you can use the code template (see page~\pageref{source})).
     \item Now suppose that there is a direct underground connection from C to B. Hence, the
     shortest path from A to B now is over C (it is only five steps). Is your heuristic still admissible ?
-    %Argue whether A* will find this shortest path.
 \end{enumerate}
 
-% \begin{minted}[frame=lines,framesep=5pt,linenos]{python3}
-% def q5():
-%     """
-%     We want to find the shortest path between A and B, we are using A*.
-%     In A*, f = g+h is the function to minimize where g is the value of
-%     smallest known path and h in the heuristic
-%     """
-%     grid = [
-%         [0, 0, 0, 0, 0, 0],
-%         [0, 0, 0, 1, 0, 0],
-%         [0, 0, 0, 1, 0, 0],
-%         [0, 0, 0, 1, 0, 0],
-%         [0, 0, 1, 1, 0, 0],
-%         [0, 0, 0, 0, 0, 0],
-%     ]
-%     start = (3, 1)
-%     goal = (3, 4)
-% \end{minted}
 
 \reponse{
     (a) If it is ensured that the algorithms do not get stuck in loops, then they will find a
 solution. Depth first search will return the first path to the goal state it happens to
 encounter, which is not guaranteed to be the shortest one. Breadth first search, will
 find the shortest path.\\
-(b) In this particular case, we can easily see that there are actually two possible ways of
-going from A to B in an efficient manner, either travel above the obstacle or travel
-below the obstacle. If you calculate the f-cost of every cell in the grid, it is observed
-that both paths have exactly the same f-cost when using the best first search. However,
-the lower path is shorter. So, with best first search, it is not guaranteed to find the
-shortest path. With A* the shortest path is found, because the heuristic is admissible.
+(b) We will use the Manhattan distance as a search heuristic, it is admissible.
+% (b) In this particular case, we can easily see that there are actually two possible ways of
+% going from A to B in an efficient manner, either travel above the obstacle or travel
+% below the obstacle. If you calculate the f-cost of every cell in the grid, it is observed
+% that both paths have exactly the same f-cost when using the best first search. However,
+% the lower path is shorter. So, with best first search, it is not guaranteed to find the
+% shortest path. With A* the shortest path is found, because the heuristic is admissible.
 (c) see github for implementation.\\
 (d) The heuristic is not admissible anymore, the A* will not find the shortest path through C.
 
@@ -429,24 +422,6 @@ G2 cannot be the solution of the A* algorithm.
 \end{Q}
 
 % Extra ex ?
-
-% \begin{Q}
-% % TODO : add figure
-%     A new game comes with a board which contains 7 cells (as shown below). There are 6
-% pivots, each containing a number. Each pivot has to be in one cell and each cell can contain
-% at most one pivot. Hence, there is always one empty cell. A pivot can be moved one cell to
-% the left or one cell to the right (if it does not break the rules given above) with a cost of 1.
-% A pivot can also jump over another pivot, with cost 2 (if it does not break the rules given
-% above). The goal of the game is to have the empty cell in the middle, such that the sum of
-% the blocks at the left of the empty cell is equal to the sum of the blocks at the right of the
-% empty cell.
-% \begin{enumerate}
-%     \item Model this as a state space search problem.
-%     \item Which of the search algorithms studied in class is best suited for solving this puzzle?
-%     Motivate (max 5 lines).
-%     \item Give a sequence of states leading to the goal state.
-% \end{enumerate}
-% \end{Q}
 
 \noindent
 \rule{\textwidth}{0.4pt}
