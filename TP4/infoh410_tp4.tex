@@ -220,12 +220,6 @@ Give decision trees to represent the following Boolean functions:
 }
 \end{Q}
 
-% \begin{Q}
-% True or false: any Boolean function can be expressed as a decision tree. Give a proof.
-% \reponse{
-% }
-% \end{Q}
-
 
 \begin{Q}
 True or False: If a decision tree D2 is an elaboration of tree D1, then D1 is more general than
@@ -288,6 +282,7 @@ blonde        & short           & light           & True            & False     
     % \item Establish the rules from the tree found in the previous question.
     % \item The factual value of the training instance, in the dataset is: \textbf{Sunburned? – Yes}. 
     \end{enumerate}
+    % TODO: correct
 \end{Q}
 
 \begin{Q}
@@ -299,8 +294,8 @@ blonde        & short           & light           & True            & False     
         \item Use the sample code (see page~\pageref{source}) to grow a tree and visualize it, using python and sklearn.
     \end{enumerate}
     \reponse{
-        (a) We should use, one hot encoding, ordinal encoding, or label encoding for continuous variables
-        (b) see github for implementation
+        (a) We should use, one hot encoding, ordinal encoding, or label encoding for continuous variables.\\
+        (b) see github for implementation.
     }
 \end{Q}
 
@@ -320,18 +315,17 @@ brown         & avg             & ?               & False           & False     
 blonde        & short           & light           & ?               & False            \\ \hline
 \end{tabular}
     \end{center}
-    
     Is this dataset suitable for training your model and will you be able to build an optimal decision
     tree? Explain briefly how you can deal with this situation.
+
+    \reponse{
+        It is suitable if processed correctly. To handle missing data in a dataset you can: 
+        drop the data (if you have a lot), fill the gaps with the most frequent value for the feature,
+        fill the data with the most common value for the same output class,
+        fill the gaps with the mean/median of a given feature (for continuous vars), etc. 
+    }
 \end{Q}
 
-\begin{Q}
-    Consider the data set given below. Explain how one can handle a continuous-valued attribute when
-building a decision tree and demonstrate the approach on the given data.
-    % TODO : add table
-\end{Q}
-
-%TODO: check other DT exs?
 
 
 \paragraph{Evaluating Hypothesis}
@@ -341,26 +335,60 @@ were misclassified. Calculate the 95\% and the 50\% confidence interval. You obs
 confidence interval is almost 4 times bigger than the 50\% confidence interval. \\ What is the meaning
 of this interval? Using 95\% confidence intervals, is it possible that the true error rate is: 
 1\% instead of 10\%? 0\% instead of 10\% ?
-%TODO: correct
+\reponse{
+The following equation is used to estimate the true error given the sample error:
+$$error_D(h)=error_s(h) \pm z_n \sqrt{\frac{error_s(h) (1-error_s(h))}{n} }$$ 
+For 95\% confidence interval, $z_n = 1.96$, for 50\%, $z_n = 0.67$.
+Here: $error_s(h) = 3/30 = 0.1$, then: \\
+95\% CI: $$error_D(h) = 0.1\pm 1.96 \sqrt{\frac{0.1 (1-0.1)}{30} } = [-0.00735, 0.20735] $$
+50\% CI: $$error_D(h) = 0.1\pm 0.67 \sqrt{\frac{0.1 (1-0.1)}{30} } = [0.0634, 0.1366] $$
+
+So, although we experienced a sample error of 0.1, the true error might seem to be with 95\% chance
+in between $[-0.00735,0.20735]$. A 0.01 is indeed in the interval, it is possible that the true error is
+actually 1\% instead of the 10\% we experienced.
+
+However, the true error cannot be 0\%, even if 0 is in the interval: As we have experienced that 3
+samples were classified wrong, the error is above 0.
+
+Obviously, the true error, cannot be in the range $[-0.00735,0.20735]$ as an error rate cannot be
+negative. Moreover, it cannot be 0 as we have evidence that there are at least 3 misclassifications.
+Hence $(0,0.20735]$ is a better estimation of the true error.
+}
 \end{Q}
 
 \begin{Q}
-    When testing a hypothesis h, we used a sample set containing n samples. We learnt that 10\% of
+    When testing a hypothesis $h$, we used a sample set containing $n$ samples. We learnt that 10\% of
 the samples were misclassified. We want to be 95\% sure (this means "with 95\% confidence") that
 the true error rate is between 5\% and 15\%. How many samples do we need in order to be able to
 assure this?
+\reponse{
+$$error_D(h) = 0.1\pm 1.96 \sqrt{\frac{0.1 (1-0.1)}{n} } = [0.05, 0.15] = 0.1 \pm 0.05 $$
+$$ n = 138.2 $$ 
+    As the number of samples is a discrete number, we need 139 samples to be 95\% confident that the
+true error is in the given interval.
 
-%TODO: correct
+}
 \end{Q}
 
 \paragraph{Bayes theorem and Na\"ive Bayes classifier}
 \begin{Q}
-For the course X, we experienced that on average one out of ten students passes. We also noticed
+For the course X, we experienced that on average 10\% of students pass. We also noticed
 over the last couple of years that from all the students who passed, 90\% did attend the exercise
 sessions. From all the students who did not pass, 95\% did not attend the exercise sessions;
 Are your chances for passing course X increased by attending the exercise sessions?
+\reponse{
+    $$P(pass) = 0.1 \rightarrow P(fail) = 0.9$$
+    $$P(present|pass) = 0.9 \rightarrow P(absent|pass) = 0.1$$
+    $$P(absent|fail) = 0.95 \rightarrow P(present|fail) = 0.05$$
+    We want to calculate $P(present)$, we use the theorem of total probability:
+    $$P(present) = P(present|pass)P(pass) + P(present|fail)P(fail) = 0.9*0.1+0.05*0.9 = 0.135$$
+    We also compute $P(pass|present)$:
+    $$P(pass|present) = \frac{P(present|pass)P(pass)}{P(present)} = 0.9*0.1/0.135 = 0.66 $$
 
-%TODO: correct
+    So yes, coming to the exercise pays off since 0.66 > 0.1(overall course success).
+    Also:
+    $$P(pass|absent) = \frac{P(absent|pass)P(pass)}{P(absent)} = 0.1*0.1/0.865 = 0.011 $$
+}
 \end{Q}
 
 \begin{Q}
@@ -368,7 +396,14 @@ An HIV test gives a positive result with probability 98\% when the patient is in
 HIV, while it gives a negative result with 99\% probability when the patient is not affected by HIV.
 If a patient is drawn at random from a population in which 0.1\% of individuals are affected by HIV
 and he is found positive, what is the probability that he is indeed affected by HIV?
-%TODO: correct
+\reponse{
+    $$P(+|HIV) = 0.98 \rightarrow P(-|HIV) = 0.02$$
+    $$P(-|!HIV) = 0.99 \rightarrow P(+|!HIV) = 0.01$$
+    We sample from a polulation where $P(HIV) = 0.001$, the patient is found positive. 
+    We compute $$P(+) = P(+|HIV)*P(HIV) + P(+|!HIV)*P(!HIV) = 0.98*0.001 + 0.01*0.999 = 0.01097$$
+    Now we compute $P(HIV|+)$:
+    $$P(HIV|+) = \frac{P(+|HIV)P(HIV)}{P(+)} = \frac{0.98*0.001}{0.01097} = 0.0893 $$ 
+}
 \end{Q}
 
 \begin{center}
@@ -392,8 +427,29 @@ and he is found positive, what is the probability that he is indeed affected by 
     At the parking lot of company X, a lot of cars get stolen. See below for an overview of the last 10
 cars which were parked. I now park my brand new RED DOMESTIC SUV, what is the maximum
 a posteriori hypothesis (MAP): will the car be stolen or not according to a na\"ive bayes classifier?
+\reponse{
+    An initial idea is to compare the probability that the car will be stolen, given the fact
+that the car is a red, domestic, SUV with the probability that the car will not be stolen, given the
+fact that the car is a red, domestic, SUV (RDS):
+$$P(stolen|RDS) = \frac{P(RDS|stolen) P(stolen)}{P(RDS)}$$
+$$P(!stolen|RDS) = \frac{P(RDS|!stolen) P(!stolen)}{P(RDS)}$$
+Naïve Bayes allows us to look at:
+$H(stolen) = P(RDS|stolen)P(stolen)$, and
+$H(!stolen) = P(RDS|!stolen)P(!stolen)$ such that we drop $P(RDS)$ as it is a constant independent
+of our possible classes.\\
+The Naïve Bayes output class will be:
+$C_{NB} = argmax(H(stolen),H(!stolen))$
 
-%TODO: correct
+$$ H(stolen) = P(RDS|stolen) P(stolen) = P(R|stolen) P(D|stolen) P(S|stolen) P(stolen)$$
+$$= 3/5 * 2/5 * 1/5 * 1/2 = 6/250 = 0.024 $$ 
+
+$$ H(!stolen) = P(RDS|!stolen) P(!stolen) = P(R|!stolen) P(D|!stolen) P(S|!stolen) P(!stolen) = 0.072$$
+
+$H(!stolen) > H(stolen)$, thus it is more likely that the car will not be stolen.
+Note that by normalizing the obtained results to sum to one, we can calculate the conditional
+probabilities for each of our classes, given the observed attribute values (red, domestic, SUV).
+For $stolen$ this is: $\frac{0.024}{0.024+0.072} = 0.25$ and $!stolen = 0.75$
+}
 \end{Q}
 
 \end{document} 
