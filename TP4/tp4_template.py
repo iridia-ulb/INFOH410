@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 # e.g. pip install sklearn pandas matplotlib
 
 
-def main():
+def q5():
     """
     This function should load the dataset and then use pandas and sklearn
     to grow a decision tree.
@@ -25,4 +25,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    q5()
