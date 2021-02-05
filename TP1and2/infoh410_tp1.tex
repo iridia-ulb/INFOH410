@@ -355,7 +355,7 @@ see github for implementation.
     \item Discuss whether depth first search and breadth first search will always find a path from
     A to B. Will they find the shortest path?
     \item Suppose that we want to use informed search in order to guide our search. 
-        What heuristic could you use ? It this heuristic admissible ?
+        What heuristic could you use ? Is this heuristic admissible ?
     %We will use the Manhattan distance as a search heuristic. Discuss whether best first search will
     %find the shortest path, use the left drawing to add f, g and h costs. Will A* do so?
     %Use the right drawing to add f, g and h costs.
@@ -409,10 +409,10 @@ optimal solution n* has an optimal cost f(n*) = C*.
 
 \begin{enumerate}
     \item Suppose that there is a solution G2 which is not optimal in the agenda. What does
-    this learn about f(G2)?
+    this teach us about f(G2)?
     \item Suppose that there is a node n in the agenda which is on the path to the optimal
     solution G. What does this learn about f(n)?
-    \item Proof that if h(n) is admissible, then the solution returned by A* is optimal.
+    \item Proove that if h(n) is admissible, then the solution returned by A* is optimal.
 \end{enumerate}
 \reponse{
     A heuristic is admissible if it never overestimates the cost to the goal.
