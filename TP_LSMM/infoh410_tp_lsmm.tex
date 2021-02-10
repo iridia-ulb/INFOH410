@@ -7,7 +7,6 @@
 \usepackage{xspace} % typographie IN
 \usepackage{hyperref}% hyperliens
 \usepackage[all]{hypcap} %lien pointe en haut des figures
-%\usepackage[french]{varioref} %voir x p y
 
 \usepackage{fancyhdr}% en têtes
 \usepackage{graphicx} %include pictures
@@ -30,7 +29,8 @@
 \setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
 \usepackage{multirow}
 
-\usepackage{aeguill} %guillemets
+\usepackage{chessboard}
+\storechessboardstyle{4x4}{maxfield=d4}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,7 +69,7 @@
 \else
 \setboolean{corrige}{true}%corrigé
 \fi
-\setboolean{corrige}{false}% pas de corrigé
+\setboolean{corrige}{true}% pas de corrigé
 
 
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -98,7 +98,7 @@ pdfsubject={}
 % ##     ##  ##     ##  ##       ##  ##       ##  ##     ##  ##     ###  ##    ##   ##     ##  
 %  #######     #####    ##       ##  ##       ##  ##     ##  ##      ##  ######      #######   
 \newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
-\ifthenelse {\boolean{corrige}} {\fr{\paragraph{Réponse :}}\en{\paragraph{Answer:}} \color{darkblue}   #1\color{black}} {}
+\ifthenelse {\boolean{corrige}} {\paragraph{Answer:} \color{darkblue}   #1\color{black}} {}
 }
 
 \newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
@@ -116,7 +116,6 @@ pdfsubject={}
 \lhead{[INFO-H-410] Techniques of AI\\ \tpnumber}
 \rhead{\version\\ page \thepage}
 \chead{\ifthenelse{\boolean{corrige}}{Correction}{}}
-\cfoot{}
 %%
 
 \setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
@@ -130,7 +129,7 @@ pdfsubject={}
 %     ##         ##          ##      ##         ##         
 %     ##      ########       ##      #########  ######### 
 \date{\vspace{-1.7cm}\version}
-\title{\vspace{-2cm} \tpnumber \\ Techniques of AI [INFO-H-410] \ifthenelse{\boolean{corrige}}{Correction}{}}
+\title{\vspace{-2cm} \tpnumber \\ Techniques of AI [INFO-H-410] \ifthenelse{\boolean{corrige}}{~\\Correction}{}}
 
 
 \begin{document}
@@ -138,26 +137,160 @@ pdfsubject={}
 
 \maketitle
 
+\fbox{
+    \parbox{\textwidth}{
+    \label{source}
+\footnotesize{
+Source files, code templates and corrections related to practical sessions can be found on the UV 
+or on github (\url{https://github.com/iridia-ulb/INFOH410}).
+}}}
+
+\paragraph{Hill Climbing}
 \begin{Q}
+We want to solve the $N$-queens problem. Suppose you want to place $N$ queens of a  $N\times N$ 
+chess board so that no queen can attack another queen.
 
+\chessboard[style=4x4,setblack={Qa4,Qb3,Qc4,Qd3},showmover=false]%&
+\chessboard[style=4x4,setblack={Qa4,Qb3,Qc4,Qd2},showmover=false]%&
+\chessboard[style=4x4,setblack={Qa4,Qb1,Qc4,Qd2},showmover=false]%&
+\chessboard[style=4x4,setblack={Qa3,Qb1,Qc4,Qd2},showmover=false] \\
 
-
+\begin{enumerate}
+    \item What would be a good heuristic for this problem ? Calculate this heuristic for each of the above board.
+    \item What would be a good state representation for this puzzle ? 
+    \item How many board arrangments are there ?
+    \item Given a clever state representation, how many board arrangments are there ?
+ \end{enumerate}
 \reponse{
+    (a) The number of pairs of attacking queens, h = 5, h = 3, h = 1, h = 0.\\
+    (b) 4 digits, one digit represents the vertical position of a given queen on a row, using this
+    state representation, already skrinks the space of solution since no 2 queens can be in the same
+    column. With this state representation, the first board is <0,1,0,1>, the second <0,1,0,2>, the third
+    <0,3,0,2>.\\
+    (c) There are 16 squares, $16 * 15 * 14 * 13 = 43680$.\\
+    (d) If we say that we only want the permutations of 4 different digits from 0 to N (that
+    way we already discard any position where 2 queens are in the same row or column) then there
+    are $N! = 24$ arrangments.
+
 }
 \end{Q}
 
 \begin{Q}
-
+    Implement exhaustive search in python (you can use the template (see page~\pageref{source})) for the aforementioned puzzle.
 \reponse{
+    see github for implementation
 }
 \end{Q}
 
 
 \begin{Q}
-
+Implement (stochastic) Hill Climbing local search in python for this puzzle. Now compare your results with 
+exhaustive search, what happens if N = 10, 15, 20 ? Why ?
 \reponse{
+    see github for implementation, exhaustive cannot work with N=12, because the search space is
+    too big ($N!$), whereas hill climbing works because the smaller neighborhood makes the branching
+    factor acceptable.
 }
 \end{Q}
 
+
+\paragraph{The Minimax algorithm}
+
+\begin{Q}
+    Perform the minimax algorithm on the following tree, first without and then with $\alpha \beta$-pruning.
+\begin{center}
+\begin{tikzpicture}[scale=1.5,font=\footnotesize]
+\tikzstyle{solid node}=[circle,draw,inner sep=1.5,fill=black]
+\tikzstyle{hollow node}=[circle,draw,inner sep=1.5]
+\tikzstyle{level 1}=[level distance=10mm,sibling distance=4.5cm]
+\tikzstyle{level 2}=[level distance=10mm,sibling distance=1.5cm]
+\tikzstyle{level 3}=[level distance=10mm,sibling distance=0.7cm]
+\tikzstyle{level 4}=[level distance=10mm,sibling distance=0.3cm]
+\node(0)[solid node,label=left:{MAX}]{}
+child{node[hollow node,label=left:{MIN}]{}
+child{node[solid node,label=left:{MAX}]{}
+    child{node[hollow node,label=left:{MIN}]{} 
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{}]{}
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{1}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node]{}{}
+    child{node[hollow node,label=left:{}]{} 
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node]{}
+    child{node[hollow node,label=left:{}]{} 
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{}]{} 
+        child{node[solid node,label=below:{7}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{}]{}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+    }
+}
+}
+child{node[hollow node,label=above right:{}]{}
+child{node[solid node]{}
+    child{node[hollow node,label=left:{}]{} 
+        child{node[solid node,label=below:{1}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{0}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node]{}
+    child{node[hollow node,label=left:{}]{} 
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{}]{} 
+        child{node[solid node,label=below:{0}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node]{}
+    child{node[hollow node,label=left:{}]{} 
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{7}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{}]{} 
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{6}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{}]{}
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{1}]{} edge from parent node[left]{}}
+    }
+}
+};
+\end{tikzpicture}
+\end{center}
+
+\reponse{
+    TODO
+}
+\end{Q}
+
+\begin{Q}
+Implement the tic tac toe game using python so that you can play against the computer using the
+minimax algorithm (you can use the template (see page~\pageref{source})).
+
+\end{Q}
+
+
+\noindent
+\rule{\textwidth}{0.4pt}
+\footnotesize{Found an error? Let us know: \url{https://github.com/iridia-ulb/INFOH410/issues}}
 
 \end{document} 
