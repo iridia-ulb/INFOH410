@@ -278,14 +278,178 @@ child{node[solid node]{}
 \end{center}
 
 \reponse{
-    TODO
+With regular minimax:\\
+\begin{tikzpicture}[scale=1.5,font=\footnotesize]
+\tikzstyle{solid node}=[circle,draw,inner sep=1.5,fill=black]
+\tikzstyle{hollow node}=[circle,draw,inner sep=1.5]
+\tikzstyle{level 1}=[level distance=10mm,sibling distance=4.5cm]
+\tikzstyle{level 2}=[level distance=10mm,sibling distance=1.5cm]
+\tikzstyle{level 3}=[level distance=10mm,sibling distance=0.7cm]
+\tikzstyle{level 4}=[level distance=10mm,sibling distance=0.3cm]
+\node(0)[solid node,label=left:{MAX (2)}]{}
+    child{node[hollow node,label=left:{MIN (2)}]{}
+    child{node[solid node,label=left:{MAX (3)}]{}
+        child{node[hollow node,label=left:{MIN (3)}]{} 
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{(1)}]{}
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{1}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node,label=left:{(2)} ]{}
+    child{node[hollow node,label=left:{(2)}]{} 
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node,label=left:{(7)}]{}
+    child{node[hollow node,label=left:{(4)}]{} 
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{(7)}]{} 
+        child{node[solid node,label=below:{7}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{(2)}]{}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+    }
+}
+}
+child{node[hollow node,label=above right:{(0)}]{}
+    child{node[solid node,label=left:{(0)}]{}
+        child{node[hollow node,label=left:{(0)}]{} 
+        child{node[solid node,label=below:{1}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{0}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node,label=left:{(3)}]{}
+    child{node[hollow node,label=left:{(3)}]{} 
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{(0)}]{} 
+        child{node[solid node,label=below:{0}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node,label=left:{(3)}]{}
+    child{node[hollow node,label=left:{(2)}]{} 
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{7}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{(3)}]{} 
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{6}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{(1)}]{}
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{1}]{} edge from parent node[left]{}}
+    }
+}
+};
+\end{tikzpicture}
+$\alpha \beta$-pruning saves 17 evaluations, unvisited nodes are labelled in red
+
+\begin{tikzpicture}[scale=1.5,font=\footnotesize]
+\tikzstyle{solid node}=[circle,draw,inner sep=1.5,fill=black]
+\tikzstyle{hollow node}=[circle,draw,inner sep=1.5]
+\tikzstyle{level 1}=[level distance=10mm,sibling distance=4.5cm]
+\tikzstyle{level 2}=[level distance=10mm,sibling distance=1.5cm]
+\tikzstyle{level 3}=[level distance=10mm,sibling distance=0.7cm]
+\tikzstyle{level 4}=[level distance=10mm,sibling distance=0.3cm]
+\node(0)[solid node,label=left:{MAX (2)}]{}
+    child{node[hollow node,label=left:{MIN (2)}]{}
+    child{node[solid node,label=left:{MAX (3)}]{}
+        child{node[hollow node,label=left:{MIN (3)}]{} 
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{(2)}]{}
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{1},color=red]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node,label=left:{(2)} ]{}
+    child{node[hollow node,label=left:{(2)}]{} 
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{2}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3}]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node,label=left:{(4)}]{}
+    child{node[hollow node,label=left:{(4)}]{} 
+        child{node[solid node,label=below:{5}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4}]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{},color=red]{} 
+        child{node[solid node,label=below:{7},color=red]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{},color=red]{}
+        child{node[solid node,label=below:{3},color=red]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{2},color=red]{} edge from parent node[left]{}}
+    }
+}
+}
+child{node[hollow node,label=above right:{(1)}]{}
+    child{node[solid node,label=left:{(1)}]{}
+        child{node[hollow node,label=left:{(1)}]{} 
+        child{node[solid node,label=below:{1}]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4},color=red]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{0},color=red]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node,label=left:{},color=red]{}
+    child{node[hollow node,label=left:{},color=red]{} 
+        child{node[solid node,label=below:{5},color=red]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3},color=red]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{},color=red]{} 
+        child{node[solid node,label=below:{0},color=red]{} edge from parent node[left]{}}
+    }
+}
+child{node[solid node,label=left:{},color=red]{}
+    child{node[hollow node,label=left:{},color=red]{} 
+        child{node[solid node,label=below:{2},color=red]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{7},color=red]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{4},color=red]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{},color=red]{} 
+        child{node[solid node,label=below:{3},color=red]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{6},color=red]{} edge from parent node[left]{}}
+    }
+    child{node[hollow node,label=left:{},color=red]{}
+        child{node[solid node,label=below:{5},color=red]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{3},color=red]{} edge from parent node[left]{}}
+        child{node[solid node,label=below:{1},color=red]{} edge from parent node[left]{}}
+    }
+}
+};
+\end{tikzpicture}
+
 }
 \end{Q}
 
 \begin{Q}
-Implement the tic tac toe game using python so that you can play against the computer using the
+Implement the tic tac toe game using python so that you can play against an AI using the
 minimax algorithm (you can use the template (see page~\pageref{source})).
-
+\begin{center}
+\begin{tabular}{c|c|c}
+  X & X & O \\      \hline
+  O & X & X \\      \hline
+  O & X & O
+\end{tabular}
+\end{center}
+\reponse{
+    see github for implementation
+}
 \end{Q}
 
 
