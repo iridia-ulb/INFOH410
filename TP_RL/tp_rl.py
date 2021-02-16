@@ -230,6 +230,6 @@ def qNNtest(filename):
 
 
 if __name__ == "__main__":
-    # q()
+    q()
     # qNN()
-    qNNtest(Path("saved/cartpoletest-150"))
+    # qNNtest(Path("saved/cartpoletest-150"))

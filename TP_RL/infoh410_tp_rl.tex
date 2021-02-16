@@ -538,18 +538,40 @@ Imagine you have a vertical pole that you want to balance verticaly along it's a
 let us use Q learning in order to learn to equilibrate this pole. We will use the "Cartpole-v0"
 environnement of openai gym (see \url{https://github.com/openai/gym/wiki/CartPole-v0}).
 
+\begin{figure}[h]
+    \centering
+\includegraphics[width=7cm]{cartpole.jpg}
+    \caption{The cartpole to balance verticaly. The cartpole can be seen as an inverted pendulum
+    sitting on a small moving cart.}
+\end{figure}
+
 \begin{enumerate}
     \item Could we tackle this problem without machine learning ? Do you have any idea how ?
     \item Given the state vector of the cart pole, let us keep only 2 features, the angle of the
-        pole and the cart velocity. How can you transform those continious variables to
+        pole and the cart velocity. How can you transform those continuous variables to
         categorical ones ? Why do you need to do so ?
     \item What is the reward function of this problem ? What are the possible actions ?
-    \item Sketch up the Q Table that you need to tackle this problem using Q Learning.
+    \item Using Q Learning to solve this problem, what will be the dimensionnality of the Q table.
     \item What is the Bellman equation ? Where is it used in Q learning ?
     \item Using the provided template, implement you solution in python. 
 
 \end{enumerate}
 
+\reponse{
+    (a) It could be done using regular control theory (\url{https://en.wikipedia.org/wiki/Inverted_pendulum)}\\
+
+    (b) Create bins of values, since Q learning uses a Qtable we need to be able to categorize so that
+    the number of cases in the table in finite. \\
+
+    (c) +1 for each timestep it still balanced \\
+
+    (d) If we keep only 2 features and categorize in 20 bins, and knowing that there are 2 possibles
+    actions, the table will be : 20x20x2
+
+    (e) The bellman equation is used to update the Q table at each timestep
+
+    (f) see github for implementation
+}
 
 \end{Q}
 
