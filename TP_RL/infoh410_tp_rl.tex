@@ -156,7 +156,9 @@ or on github (\url{https://github.com/iridia-ulb/INFOH410}).
     value iteration algorithm. 
     There is also a cliff you might fall into which would lead to $-50$ reward,
     At any point when taking an action you might slip and go in on a side 
-    with probablity $0.05$.
+    with probablity $0.05$, this means, for a given action for example "forward", you could go
+    "left" or "right" with probablity $0.05$ (but not backwards). If you are next to a border
+    any action taking you trough that border makes you stay in place.
     You start in the black spot with the following 
     default policy and value function.
     
@@ -534,7 +536,7 @@ $Q(s,a) \leftarrow \sum_{s' \in S} P^a_{ss'} ( R^a_{ss'} + \gamma \max_{a'} Q(s'
 
 \paragraph{Q Learning}
 \begin{Q}
-Imagine you have a vertical pole that you want to balance verticaly along it's axis,
+Imagine you have a vertical pole that you want to balance verticaly along its axis,
 let us use Q learning in order to learn to equilibrate this pole. We will use the "Cartpole-v0"
 environnement of openai gym (see \url{https://github.com/openai/gym/wiki/CartPole-v0}).
 
