@@ -59,20 +59,22 @@ def kl(graph):
 
         print("Initial cutsize: {}".format(cutsize))
 
+        # Enumerate all swap chainings
+        chains = [gains[0]]
+        for gain in gains[1:]:
+            chains.append(chains[-1] + gain)
+        # Only keep the best
+        maxChain = chains.index(max(chains)) + 1
         # Update the cutsize
         newCutsize = cutsize
-        for i, gain in enumerate(gains):
-            # If the cut is improved, aknowledge the gain and swap the vertices.
-            if (newCutsize - gain) < newCutsize:
-                newCutsize -= gain
-                for vertex in swaps[i]:
-                    vertex.swapPart()
-            else:
-                break
+        for i in range(maxChain):
+            newCutsize -= gains[i]
+            for vertex in swaps[i]:
+                vertex.swapPart()
         print("New cutsize: {}\n".format(newCutsize))
 
         # If the cut is not improved, stop.
-        if newCutsize == cutsize:
+        if newCutsize >= cutsize:
             break
     print("The best I cant do is {}".format(cutsize))
 
@@ -84,7 +86,7 @@ def kl(graph):
 
 
 def mainKL():
-    graph = loadGraph("large_graph_50380_539746.txt")
+    graph = loadGraph("graph.txt")
     kl(graph)
 
 
