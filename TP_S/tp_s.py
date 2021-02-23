@@ -67,8 +67,8 @@ def q4():
     """
     We represent the state by a tuple of 3 values,
     (x,y,z) where x is the number of missionaries at the left
-    y is the number of cannibals at the right and z is the position
-    of the boat. The initial state is (3,3,0)
+    y is the number of cannibals at the left and z is the position
+    of the boat. The initial state is (3,3,1)
     """
     print("Q3:")
     s = (3, 3, 1)
