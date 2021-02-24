@@ -177,7 +177,7 @@ turned into:
     \item depth first search
     \item breadth first search
     \item best first search
-    \item A* search
+    % \item A* search
 \end{enumerate}
 
 \begin{minted}[frame=lines,framesep=5pt,linenos]{python3}
@@ -201,7 +201,7 @@ the front of the agenda and taken from the front.
 
 (c) for best first search, the agenda should be a priority queue with priorities f(n) = h(n)
 
-(d) for A*, the agenda should be a priority queue with priorities f(n) = g(n) + h(n)
+% (d) for A*, the agenda should be a priority queue with priorities f(n) = g(n) + h(n)
 }
 \end{Q}
 
@@ -278,7 +278,7 @@ code on github).
 boat on the west bank that can hold no more than two people. The missionaries wish to
 cross to the east bank. But they have a problem: If on either bank the cannibals ever
 outnumber the missionaries, the outnumbered missionaries will be eaten. Is there a way for
-the missionaries to get to the east bank without losing anyone?
+all the missionaries and cannibals to get to the east bank without losing anyone?
 
 \begin{enumerate}
     \item Represent this puzzle as a search problem by defining the states and actions.
