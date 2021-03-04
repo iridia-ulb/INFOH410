@@ -77,13 +77,7 @@ def kl(graph):
         if newCutsize >= cutsize:
             break
     print("The best I cant do is {}".format(cutsize))
-
-
-
-
-
-
-
+    
 
 def mainKL():
     graph = loadGraph("graph.txt")
