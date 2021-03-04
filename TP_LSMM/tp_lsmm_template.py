@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import random
 import itertools
-from graph import *
 
 def q(n):
     """
@@ -121,6 +120,7 @@ def print_ttt(state):
             print(v, end=" | ")
         print()
         print(" __  __  __")
+
 
 if __name__ == "__main__":
     q(4)
