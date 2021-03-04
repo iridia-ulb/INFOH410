@@ -32,6 +32,49 @@
 \usepackage{chessboard}
 \storechessboardstyle{4x4}{maxfield=d4}
 
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Algorithms
+%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} % From algorithmicx
+
+%%%%%%%%%%%%
+% Vertical line trick in algorithms, https://tex.stackexchange.com/questions/292815/how-can-i-create-vertical-lines-indentation-in-algorithm-pseudo-code-correctly-w/292838#292838
+\makeatletter
+% start with some helper code
+% This is the vertical rule that is inserted
+\newcommand*{\algrule}[1][\algorithmicindent]{%
+  \makebox[#1][l]{%
+    \hspace*{.2em}% <------------- This is where the rule starts from
+    \color{black!10}\vrule height .75\baselineskip depth .25\baselineskip
+  }
+}
+
+\newcount\ALG@printindent@tempcnta
+\def\ALG@printindent{%
+    \ifnum \theALG@nested>0% is there anything to print
+    \ifx\ALG@text\ALG@x@notext% is this an end group without any text?
+    % do nothing
+    \else
+    \unskip
+    % draw a rule for each indent level
+    \ALG@printindent@tempcnta=1
+    \loop
+    \algrule[\csname ALG@ind@\the\ALG@printindent@tempcnta\endcsname]%
+    \advance \ALG@printindent@tempcnta 1
+    \ifnum \ALG@printindent@tempcnta<\numexpr\theALG@nested+1\relax
+    \repeat
+    \fi
+    \fi
+}
+% the following line injects our new indent handling code in place of the default spacing
+\patchcmd{\ALG@doentity}{\noindent\hskip\ALG@tlm}{\ALG@printindent}{}{\errmessage{failed to patch}}
+\patchcmd{\ALG@doentity}{\item[]\nointerlineskip}{}{}{} % no spurious vertical space
+% end vertical rule patch for algorithmicx
+\makeatother
+%
+%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % READ THIS BEFORE CHANGING ANYTHING
@@ -449,6 +492,63 @@ minimax algorithm (you can use the template (see page~\pageref{source})).
 \end{center}
 \reponse{
     see github for implementation
+}
+\end{Q}
+
+
+
+
+% ##   ##    ##         
+% ##  ##     ##         
+% ## ##      ##         
+% ####       ##         
+% ##  ##     ##         
+% ##   ##    ##         
+% ##    ##   ######### 
+
+\paragraph{Local search applied to graphs: Kernighan-Lin}~\newline
+
+Kernighan-Lin is an algorithm to split a graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ into two partitions $P_1$ and $P_2$ with a minimal cutisze. The cutsize $c$ is computed as $\sum_{i \in P_1, j \in P_2} w(e_{i,j})$, where $e_{i,j}$ is an edge $\in \mathcal{E}$ connecting two vertices $i, j \in \mathcal{V}$ in different partitions and $w$ the weight of said edge.
+
+The algorithm will be swapping pairs of vertices across the partition boundary in order to gradually improve the cutsize, as described in aglo~\ref{algo:kl}.
+The costs and gains it refers to are computed as follows:
+\begin{itemize}
+    \item External cost of vertex $x \in P_1$: $E_x = \sum_{i\in P_2}w(e_{x,i})$
+    \item Internal cost of vertex $x \in P_1$: $I_x = \sum_{i\in P_1}w(e_{x,i})$
+    \item Gain of swapping $x$ and $y$: $gain(x,y) = (E_x - I_x) + (E_y - I_y) - 2\cdot w(e_{x,y})$
+\end{itemize}
+
+\begin{algorithm}
+\caption{Kernighan-Lin}
+\label{algo:kl}
+\begin{algorithmic}[1]
+    \State Partition randomly into $P_1$ and $P_2$
+    \Comment Same size partitions
+    \State Compute initial cutsize
+    \Repeat
+        \State Unlock all vertices
+        \State Update costs $E_x$ and $I_x$
+        \While {Unlocked cells}
+            \ForAll{Unlocked vertices $x \in P_1$}
+                \ForAll{Unlocked vertices $y \in P_2$}
+                    \State Compute gain(x,y)
+                \EndFor
+            \EndFor
+            \State Swap pair with highest gain
+            \Comment Local search
+            \State Lock those two vertices
+        \EndWhile
+        \State Accept $n$ first swaps leading to minimal cutsize
+        \Comment Hill climbing
+    \Until{Cutsize is not improved}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{Q}
+Using the given template, implement the KL partitioning algorithm.
+Each line of the input file \texttt{graph.txt} describes an edge of the graph and is formatted as follows: \texttt{<edge weight> <vertex i> <vertex j>}
+\reponse{
+    See file \texttt{kl.py}
 }
 \end{Q}
 
