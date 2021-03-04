@@ -2,7 +2,6 @@
 import random
 import itertools
 
-
 def q(n):
     """
     We want to solve the N-queens problem: put n queens on a n*n board,
