@@ -152,7 +152,7 @@ def minimax(state, player):
     val = has_winner(state)
     # print(state, val)
     if val == -1 or val == 0 or val == 1:
-        return [val, None]
+        return [val, state]
 
     moves = []
     for move in next_moves(state, player):

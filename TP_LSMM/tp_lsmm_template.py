@@ -2,6 +2,7 @@
 import random
 import itertools
 
+
 def q(n):
     """
     We want to solve the N-queens problem: put n queens on a n*n board,
@@ -81,8 +82,12 @@ def q_minimax():
 
 
 def is_valid_move(state, x, y):
-    # TODO
-    return True
+    if x < 0 or x > 2 or y < 0 or y > 2:
+        return False
+    elif state[x][y] != ".":
+        return False
+    else:
+        return True
 
 
 def has_winner(state):
