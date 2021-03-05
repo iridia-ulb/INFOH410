@@ -200,17 +200,17 @@ chess board so that no queen can attack another queen.
 
 \begin{enumerate}
     \item What would be a good heuristic for this problem ? Calculate this heuristic for each of the above board.
-    \item What would be a good state representation for this puzzle ? 
     \item How many board arrangments are there ?
+    \item What would be a good state representation for this puzzle ? 
     \item Given a clever state representation, how many board arrangments are there ?
  \end{enumerate}
 \reponse{
     (a) The number of pairs of attacking queens, h = 5, h = 3, h = 1, h = 0.\\
-    (b) 4 digits, one digit represents the vertical position of a given queen on a row, using this
+    (b) There are 16 squares, $16 * 15 * 14 * 13 = 43680$.\\
+    (c) 4 digits, one digit represents the vertical position of a given queen on a row, using this
     state representation, already skrinks the space of solution since no 2 queens can be in the same
     column. With this state representation, the first board is <0,1,0,1>, the second <0,1,0,2>, the third
     <0,3,0,2>.\\
-    (c) There are 16 squares, $16 * 15 * 14 * 13 = 43680$.\\
     (d) If we say that we only want the permutations of 4 different digits from 0 to N (that
     way we already discard any position where 2 queens are in the same row or column) then there
     are $N! = 24$ arrangments.
