@@ -1,0 +1,369 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[english]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+%\usepackage[french]{varioref} %voir x p y
+
+\usepackage{fancyhdr}% en têtes
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry}
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+\usepackage{multirow}
+
+\usepackage{aeguill} %guillemets
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% READ THIS BEFORE CHANGING ANYTHING
+%
+%
+% - TP number: can be changed using the command
+%		\def \tpnumber {TP 1 }
+%
+% - Version: controlled by a new command:
+%		\newcommand{\version}{v1.0.0}
+%
+% - Booleans: there are three booleans used in this document:
+%	- 'corrige', controlled by defining the variable 'corrige'
+% You can define those variables in a makefile using such a command:
+% pdflatex -shell-escape -jobname="infoh410_tp1" "\def\corrige{} \input{infoh410_tp1.tex}"
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Numero du TP :
+\def \tpnumber {TP PCFOL (Propositional Calculus and First Order Logic) }
+
+\newcommand{\version}{v1.0.0}
+
+
+% ########     #####      #####    ##         #########     ###     ##      ##  
+% ##     ##  ##     ##  ##     ##  ##         ##           ## ##    ###     ##  
+% ##     ##  ##     ##  ##     ##  ##         ##          ##   ##   ## ##   ##  
+% ########   ##     ##  ##     ##  ##         ######     ##     ##  ##  ##  ##  
+% ##     ##  ##     ##  ##     ##  ##         ##         #########  ##   ## ##  
+% ##     ##  ##     ##  ##     ##  ##         ##         ##     ##  ##     ###  
+% ########     #####      #####    #########  #########  ##     ##  ##      ##  
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+\setboolean{corrige}{true}% pas de corrigé
+
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\pdfinfo{
+/Author (ULB -- CoDe/IRIDIA)
+/Title (\tpnumber, INFO-H-410)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [INFO-H-410] Techniques of AI},
+pdfauthor={ULB -- CoDe/IRIDIA},
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+
+%  ######     #####    ##       ##  ##       ##     ###     ##      ##  ######      #######   
+% ##     ##  ##     ##  ###     ###  ###     ###    ## ##    ###     ##  ##    ##   ##     ##  
+% ##         ##     ##  ## ## ## ##  ## ## ## ##   ##   ##   ## ##   ##  ##     ##  ##         
+% ##         ##     ##  ##  ###  ##  ##  ###  ##  ##     ##  ##  ##  ##  ##     ##   #######   
+% ##         ##     ##  ##       ##  ##       ##  #########  ##   ## ##  ##     ##         ##  
+% ##     ##  ##     ##  ##       ##  ##       ##  ##     ##  ##     ###  ##    ##   ##     ##  
+%  #######     #####    ##       ##  ##       ##  ##     ##  ##      ##  ######      #######   
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+\ifthenelse {\boolean{corrige}} {\paragraph{Answer:} \color{darkblue}   #1\color{black}} {}
+}
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+
+%  #######   ##########  ##    ##   ##         #########  
+% ##     ##      ##       ##  ##    ##         ##         
+% ##             ##        ####     ##         ##         
+%  #######       ##         ##      ##         ######     
+%        ##      ##         ##      ##         ##         
+% ##     ##      ##         ##      ##         ##         
+%  #######       ##         ##      #########  #########  
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[INFO-H-410] Techniques of AI\\ \tpnumber}
+\rhead{\version\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Correction}{}}
+%%
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+% ##########  ########   ##########  ##         #########  
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ######     
+%     ##         ##          ##      ##         ##         
+%     ##         ##          ##      ##         ##         
+%     ##      ########       ##      #########  ######### 
+\date{\vspace{-1.7cm}\version}
+\title{\vspace{-2cm} \tpnumber \\ Techniques of AI [INFO-H-410] \ifthenelse{\boolean{corrige}}{~\\Correction}{}}
+
+
+\begin{document}
+\selectlanguage{english}
+
+\maketitle
+
+\fbox{
+    \parbox{\textwidth}{
+    \label{source}
+\footnotesize{
+Source files, code templates and corrections related to practical sessions can be found on the UV 
+or on github (\url{https://github.com/iridia-ulb/INFOH410}).
+}}}
+
+\paragraph{Representation and Interpretation of Boolean Functions}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Symbol}            & \textbf{Name} \\ \hline
+0                          & FALSE         \\ \hline
+1                          & TRUE          \\ \hline
+$!A$ / $\neg A$ & NOT A         \\ \hline
+$A \wedge B$               & A AND B \\ \hline
+$A \vee B$                 & A OR B \\ \hline
+$A \oplus B$                 & A XOR B \\ \hline
+\end{tabular}
+\end{center}
+
+\paragraph{Propositional Calculus}
+\begin{Q}
+Use truth tables to prove the following equivalences:
+\begin{enumerate}
+    \item $P \wedge (Q \vee R) \equiv (P \wedge Q) \vee (P \wedge R)$
+    \item $P \vee (Q \wedge R) \equiv (P \vee Q) \wedge (P \vee R)$
+    \item $\neg(P \wedge Q) \equiv \neg P \vee \neg Q$
+    \item $\neg(P \vee Q) \equiv \neg P \wedge \neg Q$
+    \item $P \Rightarrow Q \equiv \neg P \vee Q $
+\end{enumerate}
+
+\reponse{
+\begin{enumerate}
+    \item $P \wedge (Q \vee R) \equiv (P \wedge Q) \vee (P \wedge R)$
+
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+$P$ & $Q$ & $R$ & $(Q \vee R)$ & $(P \wedge Q)$ & $(P \wedge R)$ & $P \wedge (Q \vee R)$ & $(P \wedge Q) \vee (P \wedge R)$ \\ \hline
+0   & 0   & 0   & 0            & 0              & 0              & 0                     & 0                                \\ \hline
+0   & 0   & 1   & 1            & 0              & 0              & 0                     & 0                                \\ \hline
+0   & 1   & 0   & 1            & 0              & 0              & 0                     & 0                                \\ \hline
+0   & 1   & 1   & 1            & 0              & 0              & 0                     & 0                                \\ \hline
+1   & 0   & 0   & 0            & 0              & 0              & 0                     & 0                                \\ \hline
+1   & 0   & 1   & 1            & 0              & 1              & 1                     & 1                                \\ \hline
+1   & 1   & 0   & 1            & 1              & 0              & 1                     & 1                                \\ \hline
+1   & 1   & 1   & 1            & 1              & 1              & 1                     & 1                                \\ \hline
+\end{tabular}
+    \item $P \vee (Q \wedge R) \equiv (P \vee Q) \wedge (P \vee R)$
+
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+$P$ & $Q$ & $R$ & $(Q \wedge R)$ & $(P \vee Q)$ & $(P \vee R)$ & $P \vee (Q \wedge R)$ & $(P \vee Q) \wedge (P \vee R)$ \\ \hline
+0   & 0   & 0   & 0              & 0            & 0            & 0                     & 0                              \\ \hline
+0   & 0   & 1   & 0              & 0            & 1            & 0                     & 0                              \\ \hline
+0   & 1   & 0   & 0              & 1            & 0            & 0                     & 0                              \\ \hline
+0   & 1   & 1   & 1              & 1            & 1            & 1                     & 1                              \\ \hline
+1   & 0   & 0   & 0              & 1            & 1            & 1                     & 1                              \\ \hline
+1   & 0   & 1   & 1              & 1            & 1            & 1                     & 1                              \\ \hline
+1   & 1   & 0   & 0              & 1            & 1            & 1                     & 1                              \\ \hline
+1   & 1   & 1   & 1              & 1            & 1            & 1                     & 1                              \\ \hline
+\end{tabular}
+
+    \item $\neg(P \wedge Q) \equiv \neg P \vee \neg Q$
+
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+$P$ & $Q$ & $(P \wedge Q)$ & $\neg P$ & $\neg Q$ & $\neg (P \wedge Q)$ & $\neg P \vee \neg Q$ \\ \hline
+0   & 0   & 0              & 1        & 1        & 1                   & 1                    \\ \hline
+0   & 1   & 0              & 1        & 0        & 1                   & 1                    \\ \hline
+1   & 0   & 0              & 0        & 1        & 1                   & 1                    \\ \hline
+1   & 1   & 1              & 0        & 0        & 0                   & 0                    \\ \hline
+\end{tabular}
+
+    \item $\neg(P \vee Q) \equiv \neg P \wedge \neg Q$
+
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+$P$ & $Q$ & $(P \vee Q)$ & $\neg P$ & $\neg Q$ & $\neg (P \vee Q)$ & $\neg P \wedge \neg Q$ \\ \hline
+0   & 0   & 0            & 1        & 1        & 1                 & 1                      \\ \hline
+0   & 1   & 1            & 1        & 0        & 0                 & 0                      \\ \hline
+1   & 0   & 1            & 0        & 1        & 0                 & 0                      \\ \hline
+1   & 1   & 1            & 0        & 0        & 0                 & 0                      \\ \hline
+\end{tabular}
+
+    \item $P \Rightarrow Q \equiv \neg P \vee Q $
+
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+$P$ & $Q$ & $P \Rightarrow Q$ & $\neg P$ & $\neg P \vee Q$ \\ \hline
+0   & 0   & 1                 & 1        & 1               \\ \hline
+0   & 1   & 1                 & 1        & 1               \\ \hline
+1   & 0   & 0                 & 0        & 0               \\ \hline
+1   & 1   & 1                 & 0        & 1               \\ \hline
+\end{tabular}
+
+\end{enumerate}
+
+}
+
+\end{Q}
+
+\begin{Q}
+Formulate the following expressions as propositional sentences:
+\begin{enumerate}
+    \item If the unicorn is magical, then it is immortal.
+    \item If the unicorn is not magical, then it is a mortal mammal.
+    \item If the unicorn is either immortal or a mammal, then it is horned.
+\end{enumerate}
+Using truth tables, can you prove whether the unicorn is magical? Immortal? Horned?
+
+\reponse{
+    We use $G$ for magical, $O$ for mortal, $M$ for mammal and $H$ for horned.
+\begin{enumerate}
+    \item $G \Rightarrow \neg O$ 
+    \item $\neg G \Rightarrow (O \wedge M) $
+    \item $(\neg O \vee M) \Rightarrow H $
+\end{enumerate}
+
+% TODO finish
+We can prove that the Unicorn is horned, but not whether it is magical, mortal nor mammal.
+}
+\end{Q}
+
+\paragraph{First Order propositions}
+\begin{Q}
+Convert those expressions to first order logic expressions.
+\begin{enumerate}
+    \item All roads lead to Rome.
+    \item All that glitters is not gold.
+    \item The enemy of my enemy is my friend.
+    \item A dog is a man's best friend.
+\end{enumerate}
+
+\reponse{
+\begin{enumerate}
+    \item $\forall x, Road(x) \Rightarrow GoToRome(x)$ 
+    \item $\neg (\forall x, Glitters(x) \Rightarrow Gold(x) ) $
+    \item $\forall x,y, Enemy(Me,x) \wedge Enemy(x,y) \Rightarrow Friend(Me,y) $
+    \item $\forall x,y, Man(x) \wedge BestFriend(x,y) \Rightarrow Dog(y)$
+\end{enumerate}
+
+
+}
+\end{Q}
+
+\paragraph{Resolution}
+\begin{Q}
+    Prove the following using resolution (negate conclusion, convert to CNF, prove contradiction)
+    \begin{enumerate}
+        \item Given $KB = \{P \wedge Q\}$, prove that $KB \models P \vee Q$.
+        \item Given $KB = \{P \vee Q, Q \Rightarrow (R \wedge S), (P \vee R) \Rightarrow U \}$, prove that $KB \models U$.
+
+    \end{enumerate}
+
+    \reponse{
+    \begin{enumerate}
+        \item Given $KB = \{P \wedge Q\}$, prove that $KB \models P \vee Q$.
+
+            \begin{itemize}
+                \item Negate conclusion: $\neg P \wedge \neg Q$
+                \item Four sentences: $P, Q, \neg P, \neg Q$
+                \item Resolve $P$ with $\neg P$, and $Q$ with $\neg Q$ gives \{\}. This means we have
+                    a contradiction, or $KB \models P \vee Q$ is true.
+            \end{itemize}
+
+        \item Given $KB = \{P \vee Q, Q \Rightarrow (R \wedge S), (P \vee R) \Rightarrow U \}$, prove that $KB \models U$.
+            \begin{itemize}
+                \item Negate conclusion: $\neg U$.
+                \item Convert to CNF: $KB = \{P \vee Q, (\neg Q \vee R) \wedge (\neg Q \vee S), (\neg P \vee U) \wedge (\neg R \vee U) \}$.
+                \item 6 sentences.
+                \item Resolve $\neg P \vee U$ with $\neg U$ which gives $\neg P$. $\neg R \vee U$ with $\neg U$ gives
+                    $\neg R$.
+                \item $\neg P \vee Q$ and $\neg P$ resolves in $Q$.
+                \item $Q$ and $\neg Q \vee R$ resolves in $R$ which contradicts with $\neg R$ from the first
+                    resolution. Thus, $KB \models U$ is true.
+            \end{itemize}
+
+    \end{enumerate}
+
+    }
+\end{Q}
+
+\begin{Q}
+    On the island of Knights and Knaves, everything a Knight says is true and everything a Knave says
+    is false. You meet two people, Alice and Bob:
+    \begin{itemize}
+        \item Alice says "Neither Bob nor I are Knaves"
+        \item Bob says "Alice is a Knave"
+    \end{itemize}
+    Using the proposition $A$ to represent "Alice is a Knight" ($\neg A$ means "Alice is a Knave")
+    and $B$ to represent "Bob is a Knight".
+    \begin{enumerate}
+        \item Formulate what Alice and Bob said.
+        \item Formulate that what they said is true if and only if they are knights.
+        \item Put those into CNF form.
+        \item Use resolution to prove who is what.
+    \end{enumerate}
+    \reponse{
+    \begin{enumerate}
+        \item Formulate what Alice and Bob said.
+
+            Alice: $A \wedge B$, Bob: $\neg A$.
+        \item Formulate that what they said is true if and only if they are knights.
+
+            Alice: $A \Leftrightarrow A \wedge B$, Bob: $B \Leftrightarrow \neg A$
+        \item Put those into CNF form.
+            \begin{itemize}
+                \item $A \Leftrightarrow A \wedge B$
+                \item $A \Rightarrow A \wedge B$, $A \wedge B \Rightarrow A$
+                \item $\neg A \vee (A \wedge B)$, $\neg(A \wedge B) \vee A$
+                \item $\neg A \vee A$ (tautology), $\neg A \wedge B$, $\neg A \vee A \vee \neg B$(tautology)
+                \item $ B \Leftrightarrow \neg A$
+                \item $B \Rightarrow \neg A$, $\neg A \Rightarrow B$
+                \item $\neg B \vee \neg A$, $A \vee B$
+
+            \end{itemize}
+        \item Use resolution to prove who is what.
+            \begin{itemize}
+                \item $\neg A \vee B$, $A \vee B$: $B$ (proof that Bob is a knight)
+                \item Now we know that $B$ is true, so since $B \Rightarrow \neg A$: $\neg A$. (Alice
+                    is a Knave)
+
+            \end{itemize}
+    \end{enumerate}
+    }
+\end{Q}
+
+\end{document} 
