@@ -69,7 +69,7 @@
 \else
 \setboolean{corrige}{true}%corrigé
 \fi
-\setboolean{corrige}{true}% pas de corrigé
+% \setboolean{corrige}{true}% pas de corrigé
 
 
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -364,6 +364,62 @@ Convert those expressions to first order logic expressions.
             \end{itemize}
     \end{enumerate}
     }
+\end{Q}
+
+
+\begin{Q}
+From "Sheep are animals", it follows that "The head of a sheep is the
+head of an animal." Demonstrate that this inference is valid by
+carrying out the following steps:
+\begin{enumerate}
+    \item Translate the premise and the conclusion into the language of first-order logic. Use three predicates: $H(h,x)$ (meaning "h is the head of x"), $S(x)$ ($Sheep(x)$), and $A(x)$ ($Animal(x)$).
+    \item Negate the conclusion, and convert the premise and the negated conclusion into conjunctive normal form.
+    \item Conclude.
+\end{enumerate}
+
+\reponse {
+
+\begin{enumerate}
+    \item $\forall x, S(x) \Rightarrow A(x)$, and $\forall x,y, H(y,z) \wedge S(z) \Rightarrow H(y,z) \wedge A(z)$
+
+    \item Which translate to, once the arrows are transformed:
+        $\forall x, \neg S(x) \vee A(x)$, and $\forall y,z, \neg (H(y,z) \wedge S(z) \vee (H(y,z) \wedge A(z) )$
+
+        then we negate the conclusion:
+        $\neg (\forall y,z, \neg (H(y,z) \wedge S(z) \vee (H(y,z) \wedge A(z) ))$
+        
+        switch to existential to move the negation:
+        $\exists y,z,\neg( \neg (H(y,z) \wedge S(z) \vee (H(y,z) \wedge A(z) ))$
+        
+        Use De Morgan laws twice:
+        $\exists y,z, H(y,z) \wedge S(z) \wedge (\neg H(y,z) \vee \neg A(z) )$
+
+        Skolemize:
+        $H(Y0,Z0) \wedge S(Z0) \wedge (\neg H(Y0,Z0) \vee \neg A(Z0))$
+
+        Knowledge base of the problem:
+        \begin{itemize}
+            \item $H(Y0,Z0)$
+            \item $S(Z0)$
+            \item $\neg H(Y0,Z0) \vee \neg A(Z0) $
+            \item $\neg S(x)  \vee A(x)$
+
+        \end{itemize}
+
+    \item Resolve $H(Y0,Z0)$ with $\neg H(Y0,Z0) \vee \neg A(Z0) $ gives $\neg A(Z0)$ 
+
+        Then resolve $\neg S(x)  \vee A(x)$ with $\neg A(Z0)$ with unifier $\{ Z0/x \}$
+
+        Resolve $\neg S(Z0)$ with $S(Z0)$ gives contradiction.
+
+
+
+
+
+
+\end{enumerate}
+
+}
 \end{Q}
 
 \end{document} 
