@@ -69,7 +69,7 @@
 \else
 \setboolean{corrige}{true}%corrigé
 \fi
-% \setboolean{corrige}{true}% pas de corrigé
+\setboolean{corrige}{true}% pas de corrigé
 
 
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -147,7 +147,7 @@ or on github (\url{https://github.com/iridia-ulb/INFOH410}).
 
 \paragraph{Feed forward neural network}
 \begin{Q}
-Consider the following NN:
+Consider the following fully connected feed forward NN:
 % Input layer neurons'number
 \newcommand{\inputnum}{2} 
 % Hidden layer neurons'number
@@ -188,7 +188,7 @@ Consider the following NN:
 {
     \foreach \j in {1,...,\hiddennum}
     {
-        \draw[->, shorten >=1pt] (Input-\i) -- node[above,scale=0.7,pos=0.2]{w\theweight} (Hidden-\j);	
+        \draw[->, shorten >=1pt] (Input-\i) -- node[above,scale=0.7,pos=0.2]{$w_\theweight$} (Hidden-\j);	
         \stepcounter{weight}
     }
 }
@@ -197,7 +197,7 @@ Consider the following NN:
 {
     \foreach \j in {1,...,\outputnum}
     {
-        \draw[->, shorten >=1pt] (Hidden-\i) -- node[above,scale=0.7,pos=0.3]{w\theweight} (Output-\j);
+        \draw[->, shorten >=1pt] (Hidden-\i) -- node[above,scale=0.7,pos=0.3]{$w_\theweight$} (Output-\j);
         \stepcounter{weight}
     }
 }
@@ -213,11 +213,58 @@ Consider the following NN:
 }
 \end{tikzpicture}
 \end{center}
+\begin{enumerate}
+    \item Give the equation for the output value of the network, given the network is linear.
+    \item Show that the output equation of the perceptron is the same as the one of the neural net shown above.
+    \item Now add an activation function $f$ to each neuron and rewrite the first equation.
+    \item Using the following inputs and weights, compute the output of the network using the sigmoid activation
+        function first, and then the ReLU activation function.
+
+    \begin{center}
+    \begin{tabular}{|l|l|l|l|l|l|l|l|}
+    \hline
+    \multicolumn{2}{|l|}{inputs} & \multicolumn{6}{l|}{weights}                  \\ \hline
+    $x_1$         & $x_2$        & $w_1$ & $w_2$ & $w_3$ & $w_4$ & $w_5$ & $w_6$ \\ \hline
+    $1$           & $1.5$        & $1$   & $2$   & $3$   & $2$   & $1$   & $3$   \\ \hline
+    \end{tabular}
+    \end{center}
+
+\end{enumerate}
 
 \reponse{
 
+\begin{enumerate}
+    \item $$y_1 = w_5 ( x_1 w_1 + x_2 w_3 ) + w_6 ( x_1 w_2 + x_2 w_4 )$$
+        $$y1 = x_1 w_5 w_1 + x_2 w_5 w_3 + x_1 w_6 w_2 + x_2 w_6 w_4$$
+        $$y1 = x_1 (w_5 w_1 + w_6 w_2) + x_2 (w_5 w_3 + w_6 w_4)  $$
+    \item This shows that a perceptron with two inputs $x_1$ an $x_2$ and weights 
+        $(w_5 w_1 + w_6 w_2)$ and $(w_5 w_3 + w_6 w_4)$ has the same output function.
+    \item $$y_1 = f(w_5 ( f(x_1 w_1 + x_2 w_3 )) + w_6 ( f(x_1 w_2 + x_2 w_4 )))$$
+    \item if f = sigmoid, $y1 = 0.98$, if f = ReLU, $y1 = 20.5$
+
+\end{enumerate}
+
 }
 
+\end{Q}
+
+\begin{Q}
+    \begin{enumerate}
+        \item Using the provided template, implement a simple neural network that can process inputs.
+            Implement the backpropagation algorithm is order to train your network.
+        \item Separate the provided dataset in training set and test set and train your network.
+        \item Evaluate the performance of your network on the training set and test set, are the results different ? why ?
+    \end{enumerate}
+    \reponse{
+
+    }
+\end{Q}
+
+\begin{Q}
+    Use tensorflow with keras o instanciate, train and test the same network as in the
+    previous question.
+
+    \reponse{}
 \end{Q}
 
 \end{document} 
