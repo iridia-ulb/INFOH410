@@ -26,8 +26,7 @@ def main():
     pbar = tqdm(range(EPOCH))
     for e in pbar:
         shuffle(x_train, y_train)
-        for _x, _y in zip(x_train, y_train):
-            nn.train_sgd(_x, _y, batch_size=BATCH_SIZE)
+        nn.train_sgd(x_train, y_train, batch_size=BATCH_SIZE)
         train_accurracy = nn.evaluate(x_train, y_train)
         test_accuracy = nn.evaluate(x_test, y_test)
         pbar.set_description(f"Epoch {e:03}/{EPOCH} - Train {train_accurracy:.3f}% - Test {test_accuracy:.3f}% ")

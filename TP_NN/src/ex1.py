@@ -28,11 +28,11 @@ def main():
         for _x, _y in zip(x_train, y_train):
             nn.train(_x, _y)
         train_accurracy = nn.evaluate(x_train, y_train)
-        test_accuracy = nn.evaluate(x_test, y_test)
-        pbar.set_description(f"Epoch {e:03}/{EPOCH} - Train {train_accurracy:.3f}% - Test {test_accuracy:.3f}% ")
+        val_accuracy = nn.evaluate(x_test, y_test)
+        pbar.set_description(f"Epoch {e:03}/{EPOCH} - Train {train_accurracy:.3f}% - Test {val_accuracy:.3f}% ")
     train_accurracy = nn.evaluate(x_train, y_train)
-    test_accuracy = nn.evaluate(x_test, y_test)
-    print(f"Train {train_accurracy:.3f}% - Test {test_accuracy}%")
+    val_accuracy = nn.evaluate(x_test, y_test)
+    print(f"Train {train_accurracy:.3f}% - Test {val_accuracy}%")
 
     plot_contour(nn, x, y)
 

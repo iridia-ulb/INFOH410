@@ -20,7 +20,7 @@ def create_dataset(N=100, K=2, D=2):
         y[ix] = j
     # lets visualize the data:
     plt.scatter(X[:, 0], X[:, 1], c=y, s=40, cmap=plt.cm.Spectral)
-    plt.show()
+    # plt.show()
 
     return X, y
 

@@ -40,11 +40,17 @@ class NeuralNetwork():
         delta_w = np.dot(delta, self.activations[-2].T)
         gradient_weights[-1] = delta_w
 
-        for l in range(2, self.size - 1):
-            delta = np.dot(self.weights[-l + 1].T, delta) * sigmoid_derivative(self.zs[-l])
-            gradient_bias[-l] = delta
-            delta_w = np.dot(delta, self.activations[-l - 1].T)
-            gradient_weights[-l] = delta_w
+        for l in range(self.size-2, 1, -1):
+            delta = np.dot(self.weights[l].T, delta) * sigmoid_derivative(self.zs[l-1])
+            gradient_bias[l-1] = delta
+            delta_w = np.dot(delta, self.activations[l-1].T)
+            gradient_weights[l-1] = delta_w
+
+        # for l in range(2, -self.size + 1, -1):
+        #     delta = np.dot(self.weights[-l + 1].T, delta) * sigmoid_derivative(self.zs[l])
+        #     gradient_bias[l] = delta
+        #     delta_w = np.dot(delta, self.activations[l - 1].T)
+        #     gradient_weights[l] = delta_w
 
         return gradient_bias, gradient_weights
 
@@ -52,21 +58,20 @@ class NeuralNetwork():
         self.weights = [w - self.l_r * nw for w, nw in zip(self.weights, nabla_w)]
         self.biases = [b - self.l_r * nb for b, nb in zip(self.biases, nabla_b)]
 
-    def train_sgd(self, x, y, batch_size=8):
-        x_batches = [x[i:i + batch_size] for i in range(0, len(x), batch_size)]
-        y_batches = [y[i:i + batch_size] for i in range(0, len(x), batch_size)]
+    def train_sgd(self, dataset_x, dataset_y, batch_size=8):
+        dataset_x_batches = [dataset_x[i:i + batch_size] for i in range(0, len(dataset_x), batch_size)]
+        dataset_y_batches = [dataset_y[i:i + batch_size] for i in range(0, len(dataset_y), batch_size)]
 
-        gradient_bias = [np.zeros(b.shape) for b in self.biases]
-        gradient_weights = [np.zeros(w.shape) for w in self.weights]
-
-        for _x, _y in zip(x_batches, y_batches):
-            y_pred = self.forward(_x)
-            delta_grad_b, delta_grad_w = self.backprop(_x, _y)
-            gradient_bias = [nb + dnb for nb, dnb in zip(gradient_bias, delta_grad_b)]
-            gradient_weights = [nw + dnw for nw, dnw in zip(gradient_weights, delta_grad_w)]
-
-        self.weights = [w - (self.l_r / batch_size) * nw for w, nw in zip(self.weights, gradient_weights)]
-        self.biases = [b - (self.l_r / batch_size) * nb for b, nb in zip(self.biases, gradient_bias)]
+        for x_batch, y_batch in zip(dataset_x_batches, dataset_y_batches):
+            gradient_bias = [np.zeros(b.shape) for b in self.biases]
+            gradient_weights = [np.zeros(w.shape) for w in self.weights]
+            for x, y in zip(x_batch, y_batch):
+                y_pred = self.forward(x)
+                delta_grad_b, delta_grad_w = self.backprop(x, y)
+                gradient_bias = [nb + dnb for nb, dnb in zip(gradient_bias, delta_grad_b)]
+                gradient_weights = [nw + dnw for nw, dnw in zip(gradient_weights, delta_grad_w)]
+            self.weights = [w - (self.l_r / batch_size) * nw for w, nw in zip(self.weights, gradient_weights)]
+            self.biases = [b - (self.l_r / batch_size) * nb for b, nb in zip(self.biases, gradient_bias)]
 
     def evaluate(self, x, y):
         test_results = [(np.argmax(self.forward(_x)), np.argmax(_y)) for _x, _y in zip(x, y)]
