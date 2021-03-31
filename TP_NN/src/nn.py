@@ -40,17 +40,16 @@ class NeuralNetwork():
         delta_w = np.dot(delta, self.activations[-2].T)
         gradient_weights[-1] = delta_w
 
-        for l in range(self.size-2, 1, -1):
-            delta = np.dot(self.weights[l].T, delta) * sigmoid_derivative(self.zs[l-1])
-            gradient_bias[l-1] = delta
-            delta_w = np.dot(delta, self.activations[l-1].T)
-            gradient_weights[l-1] = delta_w
-
-        # for l in range(2, -self.size + 1, -1):
-        #     delta = np.dot(self.weights[-l + 1].T, delta) * sigmoid_derivative(self.zs[l])
-        #     gradient_bias[l] = delta
-        #     delta_w = np.dot(delta, self.activations[l - 1].T)
-        #     gradient_weights[l] = delta_w
+        # from before last layer to first layer
+        # last layer is self.size-2
+        # before last layer is self.size-3
+        for l in range(self.size - 3, -1, -1):
+            delta = np.dot(self.weights[l + 1].T, delta) * sigmoid_derivative(self.zs[l])
+            gradient_bias[l] = delta
+            # len(activation) == len(weights)+1
+            # activation[i] is the previous activations to the layer weights[i]
+            delta_w = np.dot(delta, self.activations[l].T)
+            gradient_weights[l] = delta_w
 
         return gradient_bias, gradient_weights
 
@@ -70,8 +69,10 @@ class NeuralNetwork():
                 delta_grad_b, delta_grad_w = self.backprop(x, y)
                 gradient_bias = [nb + dnb for nb, dnb in zip(gradient_bias, delta_grad_b)]
                 gradient_weights = [nw + dnw for nw, dnw in zip(gradient_weights, delta_grad_w)]
-            self.weights = [w - (self.l_r / batch_size) * nw for w, nw in zip(self.weights, gradient_weights)]
-            self.biases = [b - (self.l_r / batch_size) * nb for b, nb in zip(self.biases, gradient_bias)]
+            gradient_weights = [nw / batch_size for nw in gradient_weights]
+            gradient_bias = [nb / batch_size for nb in gradient_bias]
+            self.weights = [w - self.l_r * nw for w, nw in zip(self.weights, gradient_weights)]
+            self.biases = [b - self.l_r * nb for b, nb in zip(self.biases, gradient_bias)]
 
     def evaluate(self, x, y):
         test_results = [(np.argmax(self.forward(_x)), np.argmax(_y)) for _x, _y in zip(x, y)]
