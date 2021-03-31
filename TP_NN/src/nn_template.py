@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class NeuralNetwork():
+class NeuralNetwork:
     def __init__(self, shape, learning_rate=1e-2):
         self.size = len(shape)
         self.shape = shape
@@ -16,18 +16,15 @@ class NeuralNetwork():
 
     def train(self, x, y):
         y_pred = self.forward(x)
-        nabla_b, nabla_w = self.backprop(x, y)
-        self.update(nabla_b, nabla_w)
+        # TODO Fill me
+
         return y_pred
 
     def forward(self, a):
         self.zs = []
         self.activations = [a]
-        for b, w in zip(self.biases, self.weights):
-            z = np.dot(w, a) + b
-            self.zs.append(z)
-            a = sigmoid(z)
-            self.activations.append(a)
+        # TODO Fill me
+
         return a
 
     def backprop(self, x, y):
@@ -35,22 +32,15 @@ class NeuralNetwork():
         gradient_weights = [np.zeros(w.shape) for w in self.weights]
 
         # last layer
-        delta = cost_derivative(self.activations[-1], y) * sigmoid_derivative(self.zs[-1])
+        delta = cost_derivative(self.activations[-1], y) * sigmoid_derivative(
+            self.zs[-1]
+        )
         gradient_bias[-1] = delta
         delta_w = np.dot(delta, self.activations[-2].T)
         gradient_weights[-1] = delta_w
 
-        for l in range(self.size-2, 1, -1):
-            delta = np.dot(self.weights[l].T, delta) * sigmoid_derivative(self.zs[l-1])
-            gradient_bias[l-1] = delta
-            delta_w = np.dot(delta, self.activations[l-1].T)
-            gradient_weights[l-1] = delta_w
-
-        # for l in range(2, -self.size + 1, -1):
-        #     delta = np.dot(self.weights[-l + 1].T, delta) * sigmoid_derivative(self.zs[l])
-        #     gradient_bias[l] = delta
-        #     delta_w = np.dot(delta, self.activations[l - 1].T)
-        #     gradient_weights[l] = delta_w
+        # other layers:
+        # TODO: Fill me
 
         return gradient_bias, gradient_weights
 
@@ -58,23 +48,10 @@ class NeuralNetwork():
         self.weights = [w - self.l_r * nw for w, nw in zip(self.weights, nabla_w)]
         self.biases = [b - self.l_r * nb for b, nb in zip(self.biases, nabla_b)]
 
-    def train_sgd(self, dataset_x, dataset_y, batch_size=8):
-        dataset_x_batches = [dataset_x[i:i + batch_size] for i in range(0, len(dataset_x), batch_size)]
-        dataset_y_batches = [dataset_y[i:i + batch_size] for i in range(0, len(dataset_y), batch_size)]
-
-        for x_batch, y_batch in zip(dataset_x_batches, dataset_y_batches):
-            gradient_bias = [np.zeros(b.shape) for b in self.biases]
-            gradient_weights = [np.zeros(w.shape) for w in self.weights]
-            for x, y in zip(x_batch, y_batch):
-                y_pred = self.forward(x)
-                delta_grad_b, delta_grad_w = self.backprop(x, y)
-                gradient_bias = [nb + dnb for nb, dnb in zip(gradient_bias, delta_grad_b)]
-                gradient_weights = [nw + dnw for nw, dnw in zip(gradient_weights, delta_grad_w)]
-            self.weights = [w - (self.l_r / batch_size) * nw for w, nw in zip(self.weights, gradient_weights)]
-            self.biases = [b - (self.l_r / batch_size) * nb for b, nb in zip(self.biases, gradient_bias)]
-
     def evaluate(self, x, y):
-        test_results = [(np.argmax(self.forward(_x)), np.argmax(_y)) for _x, _y in zip(x, y)]
+        test_results = [
+            (np.argmax(self.forward(_x)), np.argmax(_y)) for _x, _y in zip(x, y)
+        ]
         result = sum(int(_y_pred == _y) for (_y_pred, _y) in test_results)
         result /= len(x)
         return round(result, 3)

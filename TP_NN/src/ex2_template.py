@@ -34,15 +34,14 @@ def main():
             nn.train(_x, _y)
 
         # compute train and validation accuracy
-        train_accurracy = nn.evaluate(x_train, y_train)
-        test_accuracy = nn.evaluate(x_test, y_test)
+        # TODO: Fill me
+
         pbar.set_description(
             f"Epoch {e:03}/{EPOCH} - Train {train_accurracy:.3f}% - Test {test_accuracy:.3f}% "
         )
 
-    # compute train and validation accuracy
-    train_accurracy = nn.evaluate(x_train, y_train)
-    test_accuracy = nn.evaluate(x_test, y_test)
+    # compute final train and validation accuracy
+    # TODO: Fill me
     print(f"Train {train_accurracy:.3f}% - Test {test_accuracy}%")
 
     plot_contour(nn, x, y)
