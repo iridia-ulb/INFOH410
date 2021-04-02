@@ -1,9 +1,11 @@
 from utils import create_dataset, plot_contour_tf
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+import datetime
+from pathlib import Path
 
 # number of cycles through the full training dataset
-EPOCH = 50
+EPOCH = 500
 
 # dataset generation
 CLASSES = 3
@@ -31,6 +33,9 @@ def ex3():
                                                       random_state=42,
                                                       shuffle=True)
 
+    log_dir = Path("logs", "fit", datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
     model = tf.keras.Sequential()
     model.add(tf.keras.Input(shape=(DIMENSION,)))
     model.add(tf.keras.layers.Dense(10, activation=tf.keras.activations.relu))
@@ -42,11 +47,13 @@ def ex3():
     # opt = tf.keras.optimizers.Adam(learning_rate=1e-3)
     model.compile(optimizer=opt,
                   loss=tf.losses.mean_squared_error,
-                  metrics=[tf.keras.metrics.categorical_accuracy])
+                  metrics=[tf.keras.metrics.categorical_accuracy]
+                  )
     model.fit(x_train, y_train,
-              batch_size=8,
+              batch_size=1,
               epochs=EPOCH,
-              validation_data=(x_val, y_val))
+              validation_data=(x_val, y_val),
+              callbacks=[tensorboard_callback])
     print(f"Test accuracy: {model.evaluate(x_test, y_test)[1] * 100:.3f}%")
 
     plot_contour_tf(model, x, y)
