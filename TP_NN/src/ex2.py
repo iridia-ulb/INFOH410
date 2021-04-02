@@ -58,16 +58,14 @@ def generate_dateset():
 
     # automatically split dataset in train/test with 20% as test
     x_train, x_test, y_train, y_test = train_test_split(
-        x, y,
-        test_size=TEST_SPLIT,
-        random_state=42,
-        shuffle=True
+        x, y, test_size=TEST_SPLIT, random_state=42, shuffle=True
     )
     x_train, x_val, y_train, y_val = train_test_split(
-        x_train, y_train,
+        x_train,
+        y_train,
         test_size=VAL_SPLIT / (1 - TEST_SPLIT),
         random_state=42,
-        shuffle=True
+        shuffle=True,
     )
 
     return x, y, x_train, x_val, x_test, y_train, y_val, y_test
