@@ -221,17 +221,17 @@ Give decision trees to represent the following Boolean functions:
 \end{Q}
 
 
-\begin{Q}
-True or False: If a decision tree D2 is an elaboration of tree D1, then D1 is more general than
-D2. Assume D1 and D2 are decision trees representing arbitrary Boolean functions, and that D2
-is an elaboration of D1 if ID3 could extend D1 into D2. If true, give a proof; if false, give a
-counter example.
+% \begin{Q}
+% True or False: If a decision tree D2 is an elaboration of tree D1, then D1 is more general than
+% D2. Assume D1 and D2 are decision trees representing arbitrary Boolean functions, and that D2
+% is an elaboration of D1 if ID3 could extend D1 into D2. If true, give a proof; if false, give a
+% counter example.
 
-More-general-than was defined in chapter two: Let $h_j$ and $h_k$ be Boolean-valued functions defined
-over $X$. Then $h_j$ is more general than or equal to $h_k$ if and only if 
-$(\forall x \in X)$ $h_k(x) = 1 \rightarrow h_j(x) = 1 $
+% More-general-than was defined in chapter two: Let $h_j$ and $h_k$ be Boolean-valued functions defined
+% over $X$. Then $h_j$ is more general than or equal to $h_k$ if and only if 
+% $(\forall x \in X)$ $h_k(x) = 1 \rightarrow h_j(x) = 1 $
 
-\end{Q}
+% \end{Q}
 
 \paragraph{Growing Decision Trees}
 \begin{Q}
@@ -262,7 +262,7 @@ sun.
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
-\textbf{hair} & \textbf{height} & \textbf{weight} & \textbf{lotion} & \textbf{sunburn} \\ \hline
+\textbf{hair} & \textbf{height} & \textbf{weight} & \textbf{lotion} & \textbf{sunburn?} \\ \hline
 blonde        & avg             & light           & False           & True             \\ \hline
 blonde        & tall            & avg             & True            & False            \\ \hline
 brown         & short           & avg             & True            & False            \\ \hline
@@ -282,7 +282,66 @@ blonde        & short           & light           & True            & False     
     % \item Establish the rules from the tree found in the previous question.
     % \item The factual value of the training instance, in the dataset is: \textbf{Sunburned? – Yes}. 
     \end{enumerate}
-    % TODO: correct
+
+    \reponse{
+    the entropy H of a set S is given by: $H(s) = \sum_{x\in X}-p(x) log_2(p(x)) $\\
+    (a) Entropy of  the complete dataset is therefore: $H(S) = -\frac{3}{8} log_2(\frac{3}{8}) - \frac{5}{8} log_2(\frac{5}{8}) = 0.954 $
+    then for each feature:
+    \begin{itemize}
+        \item $H(Hair,blonde)[++,--]$(2 positive and 2 negative samples)$ =  -\frac{1}{2} log_2(\frac{1}{2})  -\frac{1}{2} log_2(\frac{1}{2}) $
+        \item $H(Hair,brown)[---] = 0 $
+        \item $H(Hair,red)[+] = 0 $
+        \item $IG(Hair) = 0.954 - \frac{4}{8} \times 1 - \frac{3}{8} \times 0 - \frac{1}{8} \times 0 = 0.454$
+        \item ...
+        \item $IG(Height) = 0.954 - \frac{3}{8}\times 0.918 - \frac{2}{8}\times 0  - \frac{3}{8}\times 0.918 = 0.266$
+        \item $IG(Weight) = 0.954 - \frac{2}{8}\times 1 - \frac{3}{8}\times 0.918 - \frac{3}{8}\times 0.918 = 0.016$
+        \item $IG(Lotion) = 0.954 - \frac{5}{8}\times 0.971 - \frac{3}{8}\times 0 = 0.347 $
+    \end{itemize}
+    The attribute with the biggest gain is "Hair", so we build the first layer of the tree with it.
+
+    \begin{tikzpicture}[node distance={30mm}, main/.style = {draw, rectangle}] 
+    \node[main] (1) {Hair}; 
+    \node[] (4)[below of=1] {Not burned};
+    \node[] (2)[right of=4] {Burned}; 
+    \node[main] (3)[left of=4] {[+,+,-,-] (to grow)};
+
+    \draw[-] (1) -- node[right]{Red} (2);
+    \draw[-] (1) -- node[left]{Blonde} (3);
+    \draw[-] (1) -- node[]{Brown} (4);
+    \end{tikzpicture} 
+
+    (b) We continue growing the tree, by the computing the entropies (with updated S excluding already classified samples)
+
+    $H(S)[++,--] = 1 $
+
+    For each features left:
+    \begin{itemize}
+        \item $H(Height, average)[+] = 0 $
+        \item $H(Height, tall)[-] = 0 $
+        \item $H(Height, short)[+,-] = 1 $
+        \item $IG(Height) = 1 - \frac{2}{4}\times 1 = 0.5 $
+        \item ...
+        \item $IG(Weight) = 1 - \frac{1}{2}\times 1 - \frac{1}{2}\times 1 = 0$
+        \item $IG(Lotion) = 1 - 0 - 0 = 1$
+    \end{itemize}
+
+    The attribute with the biggest gain is "Lotion", so we build the next layer of the tree with it.
+
+    \begin{tikzpicture}[node distance={20mm}, main/.style = {draw, rectangle}] 
+    \node[main] (1) {Hair}; 
+    \node[] (4)[below of=1] {Not burned};
+    \node[] (2)[right of=4] {Burned}; 
+    \node[main] (3)[left of=4] {Lotion};
+    \node[] (5)[below of=3] {Not burned};
+    \node[] (6)[right of=5] {Burned}; 
+
+    \draw[-] (1) -- node[right]{Red} (2);
+    \draw[-] (1) -- node[left]{Blonde} (3);
+    \draw[-] (1) -- node[]{Brown} (4);
+    \draw[-] (3) -- node[left]{Yes} (5);
+    \draw[-] (3) -- node[right]{No} (6);
+    \end{tikzpicture} 
+}
 \end{Q}
 
 \begin{Q}
