@@ -7,6 +7,9 @@ import argparse
 import numpy as np
 import parseTSP
 
+# For visualization
+# import animation
+
 
 class Ant:
     def __init__(self, tsp, probability, rng):
@@ -107,6 +110,9 @@ def main(args, rng):
     # Init TSP instance
     tsp = parseTSP.TSP(args.file)
 
+    # For visualization:
+    # viz = animation.Visu(tsp)
+
     # create ant colony
     colony = Colony(tsp, rng, args.ants, args.alpha, args.beta, args.rho)
 
@@ -114,7 +120,7 @@ def main(args, rng):
     it = 0
     tours = 0
     best_tour_length = np.inf
-    best_ant = 0
+    best_tour = []
     ended = False
 
     # begin swarming
@@ -124,9 +130,9 @@ def main(args, rng):
             ant_tour = ant.compute_tour_length()
             if ant_tour < best_tour_length:
                 best_tour_length = ant_tour
-                best_ant = ant
+                best_tour = ant.tour
             tours += 1
-        print(f"** Tours: {tours} - Best: {best_tour_length} - Ant: {best_ant}")
+        print(f"** Tours: {tours} - Best: {best_tour_length} - {best_tour}")
         it += 1
 
         colony.evaporate_pheromone()
@@ -136,7 +142,11 @@ def main(args, rng):
         if tours > args.tours or it > args.it:
             ended = True
 
+        # For visualization:
+        # viz.animate(best_tour, colony.pheromones)
+
     print(f"Best: {best_tour_length}, End of ACO")
+    input()
 
 
 if __name__ == "__main__":
