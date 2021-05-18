@@ -31,29 +31,9 @@ class Ant:
             self.tour.append(self.get_next_city())
 
     def get_next_city(self):
-        latest_city = self.tour[-1]
-        max_cumulative_prob = 0
-        selection_probability = [0 for _ in range(len(self.tsp))]
-        best_distance = np.inf
-        # if all cities are with proba 0, prepare greedy selection
-        greedy_city = 0
-        for j in range(len(self.tsp)):
-            if j not in self.tour:
-                max_cumulative_prob += self.probability[latest_city, j]
-                selection_probability[j] = max_cumulative_prob
-                d = self.tsp.dist(latest_city, j)
-                if d < best_distance:
-                    best_distance = d
-                    greedy_city = j
-
-        if max_cumulative_prob == 0:
-            # all cities with 0 probability
-            return greedy_city
-
-        choice = rng.uniform(0, max_cumulative_prob)
-        return next(
-            city[0] for city in enumerate(selection_probability) if city[1] > choice
-        )
+        # TODO: Implement here
+        next_city = 0
+        return next_city
 
     def compute_tour_length(self):
         if self.tour_length != 0:
@@ -86,24 +66,19 @@ class Colony:
         self.ants = [Ant(tsp, self.probability, rng) for _ in range(n)]
 
     def compute_probability_matrix(self):
+        self.probability = None
+        # TODO: Implement here
         # has to be done "inplace" so that it has the same ref and updates for ants
-        np.multiply(
-            self.pheromones ** self.alpha, self.heuristic ** self.beta, self.probability
-        )
 
     def evaporate_pheromone(self):
-        np.multiply((1 - self.rho), self.pheromones, self.pheromones)
-        #  (1-rho)·tau_ij
-        # self.pheromones = (1 - self.rho) * self.pheromones
+        self.pheromones = None
+        # TODO: Implement here
+        # has to be done "inplace" so that it has the same ref and updates for ants
 
     def deposit_pheromone(self):
-        for ant in self.ants:
-            delta = 1 / ant.compute_tour_length()
-            for a, b in zip(ant.tour, ant.tour[1:]):
-                self.pheromones[b, a] += delta
-                self.pheromones[a, b] += delta
-            self.pheromones[ant.tour[-1], ant.tour[0]] += delta
-            self.pheromones[ant.tour[0], ant.tour[-1]] += delta
+        self.pheromones = None
+        # TODO: Implement here
+        # has to be done "inplace" so that it has the same ref and updates for ants
 
 
 def main(args, rng):

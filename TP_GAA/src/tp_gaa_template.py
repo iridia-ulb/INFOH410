@@ -86,33 +86,18 @@ def random_population(size, dna_size):
 
 
 def fitness(dna, optimal):
-    score = 1  # min score is 1 to avoid 0 division
-    for l1, l2 in zip(dna, optimal):
-        score += abs(ord(l1) - ord(l2))
-    return 1 / score
+    # TODO
+    return 1
 
 
 def mutate(dna):
-    """
-    Mutate with each char with random char with probability 1/100
-    """
-    mutated = ""
-    for l in dna:
-        if random.randint(0, 100) == 0:
-            mutated += random_char()
-        else:
-            mutated += l
-    return mutated
+    # TODO
+    return dna
 
 
 def crossover(dna1, dna2, dna_size):
-    """
-    Slices both dna1 and dna2 into two parts at a random index within their
-    length and merges them. Both keep their initial sublist up to the crossover
-    index, but their ends are swapped.
-    """
-    pos = int(random.random() * dna_size)
-    return (dna1[:pos] + dna2[pos:], dna2[:pos] + dna1[pos:])
+    # TODO
+    return (dna1, dna2)
 
 
 #
@@ -143,17 +128,7 @@ def main(args):
         # their genes over at a random point, mutate them, and add them back to the
         # population for the next iteration.
         population = []
-        for _ in range(args.pop // 2):
-            # Selection
-            ind1 = weighted_choice(weighted_population)
-            ind2 = weighted_choice(weighted_population)
-
-            # Crossover
-            ind1, ind2 = crossover(ind1, ind2, len(args.goal))
-
-            # Mutate and add back into the population.
-            population.append(mutate(ind1))
-            population.append(mutate(ind2))
+        # TODO: create new population (fill population list):
 
     # Display the highest-ranked string after all generations have been iterated
     # over. This will be the closest string to the OPTIMAL string, meaning it
