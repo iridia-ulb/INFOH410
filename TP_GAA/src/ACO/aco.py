@@ -8,7 +8,7 @@ import numpy as np
 import parseTSP
 
 # For visualization
-# import animation
+import animation
 
 
 class Ant:
@@ -111,7 +111,7 @@ def main(args, rng):
     tsp = parseTSP.TSP(args.file)
 
     # For visualization:
-    # viz = animation.Visu(tsp)
+    viz = animation.Visu(tsp)
 
     # create ant colony
     colony = Colony(tsp, rng, args.ants, args.alpha, args.beta, args.rho)
@@ -143,7 +143,7 @@ def main(args, rng):
             ended = True
 
         # For visualization:
-        # viz.animate(best_tour, colony.pheromones)
+        viz.animate(best_tour, colony.pheromones)
 
     print(f"Best: {best_tour_length}, End of ACO")
     input()

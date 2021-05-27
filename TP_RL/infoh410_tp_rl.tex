@@ -73,7 +73,7 @@
 \setboolean{corrige}{true}%corrigé
 \fi
 
-\setboolean{corrige}{true}
+% \setboolean{corrige}{true}
 
 
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -224,7 +224,8 @@ or on github (\url{https://github.com/iridia-ulb/INFOH410}).
         \node[] at (0.5,0.5) {$0.05$};
     \end{tikzpicture}
 
-    Using the bellman equation:
+    We are in a markovian setup and we want to compute the value function, this function boils down
+    to $V^\pi (s) = Q^\pi (s, \pi(s))  $, so we solve the problem using the bellman equation:
 $Q(s,a) \leftarrow \sum_{s' \in S} P^a_{ss'} ( R^a_{ss'} + \gamma \max_{a'} Q(s',a') )$
 
     (c) and (d) Iterations:
