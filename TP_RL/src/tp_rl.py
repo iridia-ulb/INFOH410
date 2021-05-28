@@ -13,8 +13,8 @@ def q():
 
     numBins = 25
     bins = [
-        np.linspace(-4.8, 4.8, numBins),
-        # np.linspace(-5, 5, numBins),
+        # np.linspace(-4.8, 4.8, numBins),
+        np.linspace(-5, 5, numBins),
         np.linspace(-0.418, 0.418, numBins),
         # np.linspace(-5, 5, numBins),
     ]
