@@ -64,6 +64,9 @@ def q():
 
             # formula to caculate all Q values
             newQ = (1 - LR) * currentQ + LR * (reward + DISCOUNT * maxFutureQ)
+            # or:
+            # newQ = reward + DISCOUNT * maxFutureQ
+
             # Update qTable with new Q value
             qTable[discreteState + (action,)] = newQ
             discreteState = newDiscreteState
