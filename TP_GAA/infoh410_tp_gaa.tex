@@ -54,7 +54,7 @@
 %Numero du TP :
 \def \tpnumber {TP GAA (Genetic Algorithms and Ant System) }
 
-\newcommand{\version}{v1.0.0}
+\newcommand{\version}{v1.0.1}
 
 
 % ########     #####      #####    ##         #########     ###     ##      ##  
@@ -458,9 +458,9 @@ algorithm.
 \begin{equation}\label{eq:phero}
 \begin{aligned}
 	UpdatePheromones \rightarrow \tau_{ij}(t) = 
-	(1-\rho)\cdot\tau(t-1) + \sum_{k=1}^{m}\bigtriangleup\tau_{ij}^k 
+	(1-\rho)\cdot\tau(t-1) + \sum_{k=1}^{m}\Delta\tau_{ij}^k 
 	\\
-	\tau_{ij}^k = \frac{1}{L_k}, \qquad \text{if $arc(i,j)$ is used 
+	\Delta\tau_{ij}^k = \frac{1}{L_k}, \qquad \text{if $arc(i,j)$ is used 
 	by 
 	ant k on its tour}
 \end{aligned}

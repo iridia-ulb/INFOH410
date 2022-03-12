@@ -572,7 +572,8 @@ environnement of openai gym (see \url{https://github.com/openai/gym/wiki/CartPol
     (d) If we keep only 2 features and categorize in 20 bins, and knowing that there are 2 possibles
     actions, the table will be : 20x20x2
 
-    (e) The bellman equation is used to update the Q table at each timestep
+    (e) The bellman equation is used to update the approximation of the Q table at each timestep so that:
+    $Q_{t+1}(s,a) =  (1-\alpha) Q_{t}(s,a) + \alpha( R^a_{t+1} + \gamma \max_{a} Q_t(s_{t+1},a) )$
 
     (f) see github for implementation
 }
